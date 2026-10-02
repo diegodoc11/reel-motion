@@ -86,7 +86,7 @@ procesador), pero ahí se ha probado menos: si algo falla, abre un *issue* con e
 ## Preguntas
 
 **¿Cuánto tarda?** Un video de un minuto, en un portátil con tarjeta gráfica: unos 10 minutos preparándolo,
-10 a 20 recortándote, y el render final unos 8. En medio, Claude diseña y revisa las escenas. La primera vez
+unos 10 recortándote, y el render final unos 8. En medio, Claude diseña y revisa las escenas. La primera vez
 súmale la descarga de los modelos.
 
 **¿Cuánto gasta de mi plan de Claude?** Depende del largo del video y de cuántas vueltas de ajustes pidas.

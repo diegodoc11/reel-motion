@@ -44,9 +44,24 @@ def _abrir(path):
             print(f'  ({orden[i]} no sirvió aquí, pruebo el siguiente)', flush=True)
     raise SystemExit('No pude abrir el modelo de recorte con ningún acelerador ni con el procesador.')
 
-def guiado(bgr, a):
-    if hasattr(cv2, 'ximgproc'): return cv2.ximgproc.guidedFilter(bgr, a, 8, (0.02 * 255) ** 2)
+def guiado(gris, a):
+    if hasattr(cv2, 'ximgproc'): return cv2.ximgproc.guidedFilter(gris, a, 8, (0.02 * 255) ** 2)
     return a          # sin opencv-contrib: se salta el pulido del borde (queda un poco más blando)
+
+def pulir(bgr, pha, fgr):
+    """Devuelve (alfa float 0..1, BGRA uint8). El alfa se pega al borde real (filtro guiado + niveles) y el color del sujeto se
+    extiende hacia afuera para que no se cuele el fondo en el borde. Todo en OpenCV: numpy a esta resolución era 3 veces más lento."""
+    H_, W_ = pha.shape
+    a = np.clip((guiado(cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY), np.clip(pha, 0, 1)) - 0.20) / 0.60, 0, 1)
+    fg = cv2.merge([fgr[2], fgr[1], fgr[0]])                                # color "limpio" del primer plano, BGR float32 0..1
+    sw, sh = W_ // 4, H_ // 4                                               # la extensión de color es suave: se calcula a 1/4
+    sa = cv2.resize(a, (sw, sh), interpolation=cv2.INTER_AREA)
+    sf = cv2.resize(fg, (sw, sh), interpolation=cv2.INTER_AREA) * sa[..., None]
+    ext = cv2.GaussianBlur(sf, (0, 0), 1.5) / (cv2.GaussianBlur(sa, (0, 0), 1.5)[..., None] + 1e-4)
+    ext = cv2.resize(ext, (W_, H_), interpolation=cv2.INTER_LINEAR)
+    col = cv2.blendLinear(fg, ext, a, 1.0 - a)                              # fg*a + ext*(1-a)
+    col8 = cv2.convertScaleAbs(col, alpha=255); a8 = cv2.convertScaleAbs(a, alpha=255)
+    return a, cv2.merge([col8[..., 0], col8[..., 1], col8[..., 2], a8])
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1].startswith('-'): raise SystemExit(__doc__)
@@ -72,21 +87,16 @@ def main():
         buf = dec.stdout.read(nb)
         if len(buf) < nb: break
         bgr = np.frombuffer(buf, np.uint8).reshape(H, W, 3)
-        src = (bgr[..., ::-1].astype(np.float32) / 255.0).transpose(2, 0, 1)[None]
-        fgr, pha, *rec = sess.run(None, {'src': np.ascontiguousarray(src), 'r1i': rec[0], 'r2i': rec[1], 'r3i': rec[2], 'r4i': rec[3], 'downsample_ratio': dr})
-        a = np.clip(pha[0, 0], 0, 1)
-        a = np.clip((guiado(bgr, a) - 0.20) / 0.60, 0, 1)                 # el borde se pega al borde real y se quitan halos
-        fg = np.clip(fgr[0].transpose(1, 2, 0)[..., ::-1], 0, 1)          # color del primer plano "limpio" (BGR 0..1)
-        am = a[..., None]
-        ext = np.clip(cv2.GaussianBlur(fg * am, (0, 0), 6) / (cv2.GaussianBlur(a, (0, 0), 6)[..., None] + 1e-4), 0, 1)
-        col = np.where(am > 0.98, fg, fg * am + ext * (1 - am))           # el color del sujeto se extiende hacia afuera (no se cuela el fondo)
-        enc.stdin.write(np.dstack([(col * 255 + 0.5).astype(np.uint8), (a * 255 + 0.5).astype(np.uint8)]).tobytes())
+        src = cv2.dnn.blobFromImage(bgr, scalefactor=1 / 255.0, swapRB=True)      # NCHW float32 RGB, en C++
+        fgr, pha, *rec = sess.run(None, {'src': src, 'r1i': rec[0], 'r2i': rec[1], 'r3i': rec[2], 'r4i': rec[3], 'downsample_ratio': dr})
+        a, bgra = pulir(bgr, pha[0, 0], fgr[0])
+        enc.stdin.write(bgra.tobytes())
         if n % 5 == 0:                                                     # tope de la cabeza (para encuadrar la tarjeta)
             filas = np.where((a > 0.5).sum(axis=1) > 20)[0]
             if len(filas): tops.append(int(filas[0]))
-        if n % paso == int(FPS * 2) % paso:
-            chk = col * am + np.array([0.11, 0.13, 0.85], np.float32) * (1 - am)
-            checks.append(cv2.resize((chk * 255).astype(np.uint8), (W // 4, H // 4), interpolation=cv2.INTER_AREA))
+        if n % paso == int(FPS * 2) % paso:                                # hoja de revisión: el sujeto sobre rojo
+            chk = cv2.blendLinear(bgra[..., :3], np.full((H, W, 3), (28, 33, 217), np.uint8), a, 1.0 - a)
+            checks.append(cv2.resize(chk, (W // 4, H // 4), interpolation=cv2.INTER_AREA))
         n += 1
         if n % 150 == 0:
             v = n / (time.time() - t0); falta = (total - n) / v / 60 if total else 0

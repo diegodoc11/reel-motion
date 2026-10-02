@@ -114,7 +114,7 @@ PY "SKILL/scripts/recortar.py" "<P>"
 ```
 
 Genera `cutout.webm` (el presentador con transparencia) y `silueta.json`. Usa la tarjeta gráfica si hay; tarda
-~10-20 min por minuto de video (bastante más sin GPU). **Abre y mira `P/_work/matte_check.jpg`**: el presentador
+~10 min por minuto de video con GPU (bastante más sin ella). **Abre y mira `P/_work/matte_check.jpg`**: el presentador
 debe verse completo sobre rojo, sin pedazos del fondo ni huecos. Si se cuelan objetos del fondo o faltan manos:
 `--ratio 0.4` o `--ratio 0.6` y compara.
 
