@@ -84,6 +84,7 @@ Deja en `P`: `source.mp4`, `cut.mp4` (1080×1920, 30 fps, sin silencios largos; 
 `--modelo medium`, `--sin-silencios`. Tarda ~5-10 min por minuto de video.
 
 Lee los avisos: si dice que la cara ocupa mucho cuadro, arma el reel solo con los encuadres `card` y `full`.
+El guion impreso sale SIN corregir: anota ya los nombres que whisper oyó mal ("Cloud" → "Claude") para `correcciones=`.
 
 ### 2.2 Buscar equivocaciones (obligatorio)
 
@@ -139,7 +140,7 @@ Copia una plantilla a `P/build.py`:
   recetas). Copia de ahí las recetas que necesites (§5); no lo uses entero para otro guion.
 
 ```bash
-PY build.py --guion        # imprime las palabras con sus tiempos (para escribir f('…') sin adivinar; no necesita el recorte)
+PY build.py --guion        # palabras con sus tiempos, YA con las correcciones aplicadas (f() busca el texto corregido); no necesita el recorte
 PY build.py                # arma index.html + mezcla el audio (final_audio.wav)
 PY build.py --no-audio     # igual pero sin remezclar (rápido, para iterar lo visual)
 ```
@@ -154,7 +155,8 @@ npx hyperframes snapshot . --at 1.2,4.8,9.5 --no-end --timeout 60000 -o snaps   
 ```
 
 (El aviso `composition_file_too_large` es normal.) Elige para cada escena un segundo ~0.5 s después de que entró
-su último elemento, abre `snaps/contact-sheet.jpg` y **mírala**. Lista de control:
+su último elemento, abre `snaps/contact-sheet*.jpg` (una hoja por cada 9 cuadros) y **míralas**. Mira también +0.2 s y
++0.45 s después de cada `ir_a()` (ahí es donde se montan las cosas). Lista de control:
 
 - [ ] Nada tapa la cara ni la boca (ni piezas ni subtítulos).
 - [ ] Todo el texto cabe: nada cortado por el borde derecho ni montado sobre otra cosa.

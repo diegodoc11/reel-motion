@@ -32,7 +32,7 @@
 .cc svg{width:70%;height:70%}
 .lab{position:absolute;right:82px;top:260px;font-family:"JBM";font-weight:500;font-size:22px;letter-spacing:.06em;color:#77776f}
 .ttl{position:absolute;left:78px;top:322px;white-space:nowrap}
-.hk-sz .ttl{font-family:"IT";font-weight:900;font-size:98px;letter-spacing:-.05em;line-height:1.08;color:__INK__}
+.hk-sz .ttl{font-family:"IT";font-weight:900;font-size:98px;letter-spacing:-.05em;line-height:1.08;color:__INK__}.hk-sz .ac{color:__RED__}
 .hk-bl{color:#fff}.hk-bl .lab{color:#d6e4ff}
 .hk-bl .ttl{font-family:"JBM";font-weight:500;font-size:74px;letter-spacing:-.02em;line-height:1.2}.hk-bl .ac{color:#9CC2FF}
 .hk-pa .lab{color:#b9a79a}

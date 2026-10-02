@@ -67,6 +67,7 @@ P = None; DUR = 0.0; CUT = None; WD = []; FACE = None
 rnd = random.Random(1)
 init, tw, parts, sfx, caps = [], [], [], [], []
 ESTADO = 'card'; PAPEL = None; SPLIT_OK = True
+CORRECCIONES = {}
 DO_AUDIO = '--no-audio' not in sys.argv
 _n_caps = 0; _n_grupos = 0
 
@@ -242,7 +243,7 @@ def leave(el, t, dur=0.16):
 
 def typed(idp, text, t, cps=30, snd=0.07, cls=''):
     """máquina de escribir: devuelve el HTML (una letra por span) y programa su aparición desde t a cps letras/seg."""
-    out = ''
+    out = ''; text = html.unescape(text)                      # acepta &iquest; &aacute; etc.
     for i, c in enumerate(text):
         out += f'<span class="ch {cls}" id="{idp}{i}">{html.escape(c) if c != " " else "&nbsp;"}</span>'
         I(f'#{idp}{i}', opacity=0); S(f'#{idp}{i}', t + i / cps, opacity=1)
@@ -509,6 +510,7 @@ def subtitulos(desde=0.0, hasta=None, propios=('Claude', 'Code', 'Opus'), cambio
     huecos        : [(t0, t1)] tramos SIN subtítulos (p. ej. mientras suena un clip que ya trae su texto)."""
     global _n_caps, _n_grupos
     hasta = DUR if hasta is None else hasta; y = CAP_Y if y is None else y
+    propios = tuple(propios) + tuple(w for v in CORRECCIONES.values() for w in v.split())   # los nombres corregidos no inician frase
     words = [dict(w) for w in WD if desde - 0.02 <= w['start'] < hasta and not any(a <= w['start'] < b for a, b in huecos)]
     for i, w in enumerate(words):
         if norm(w['text']) == 'aún' and i + 1 < len(words) and norm(words[i + 1]['text']) == 'así': w['text'] = 'aun'
@@ -632,7 +634,8 @@ def iniciar(proyecto, correcciones=None, semilla=1, colores=None):
                    {'acento': '#D11F1D', 'tinta': '#0D1216', 'fondo': '#E8E8E1', 'segundo': '#3354E4'}
                    acento = tarjeta, palabra activa de los subtítulos y CTA · tinta = titulares · fondo = fondo claro · segundo = 2º color de tarjeta
     semilla      : cambia el azar de las piezas (confeti, bordes de papel…)"""
-    global P, DUR, CUT, WD, FACE, rnd, ESTADO, PAPEL, _n_caps, _n_grupos, RED, INK, OFF, BLUE
+    global P, DUR, CUT, WD, FACE, rnd, ESTADO, PAPEL, _n_caps, _n_grupos, RED, INK, OFF, BLUE, CORRECCIONES
+    CORRECCIONES = dict(correcciones or {})
     for k, v in (colores or {}).items():
         if k == 'acento': RED = v
         elif k == 'tinta': INK = v
