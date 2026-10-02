@@ -640,7 +640,8 @@ def iniciar(proyecto, correcciones=None, semilla=1, colores=None):
         elif k == 'segundo': BLUE = v
         else: raise SystemExit(f"colores: no conozco '{k}' (usa acento, tinta, fondo, segundo)")
     P = os.path.abspath(proyecto)
-    for need in ('cut.mp4', 'cutout.webm', 'words.json', 'face.json', 'cutmap.json'):
+    solo_guion = '--guion' in sys.argv                      # para ver el guion no hace falta el recorte todavía
+    for need in ('cut.mp4', 'words.json', 'face.json', 'cutmap.json') + (() if solo_guion else ('cutout.webm',)):
         if not os.path.exists(os.path.join(P, need)):
             raise SystemExit(f'Falta {need} en {P}. Corre primero scripts/preparar.py y scripts/recortar.py (ver SKILL.md).')
     CUT = json.load(open(os.path.join(P, 'cutmap.json'))); DUR = round(CUT['dur'], 3)

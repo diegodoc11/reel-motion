@@ -6,7 +6,8 @@ reel-motion · INSTALAR  (se corre UNA sola vez; se puede repetir sin problema)
 
   1. crea un entorno de Python propio dentro de la skill (.venv) con lo necesario (numpy, pillow, opencv, onnxruntime)
   2. descarga el modelo de recorte de personas (Robust Video Matting, 103 MB)
-  3. revisa que estén: ffmpeg, Node.js (npx), whisper.cpp (whisper-cli) y el modelo de whisper (lo descarga si falta: 3 GB)
+  3. revisa que estén: ffmpeg, Node.js (npx), whisper.cpp (whisper-cli / whisper-server), deja listo HyperFrames
+     y descarga el modelo de whisper si falta (3 GB)
 Al final imprime la ruta del Python que debes usar para los demás scripts.
 """
 import sys, os, shutil, subprocess, urllib.request, platform
@@ -58,6 +59,17 @@ def main():
                                ('whisper-server', 'whisper.cpp (whisper-server)', como('scoop install whisper-cpp', 'brew install whisper-cpp', 'https://github.com/ggml-org/whisper.cpp'))):
         if shutil.which(exe) or (WIN and shutil.which(exe + '.cmd')): ok.append(nombre)
         else: falta.append(f'{nombre}  ->  instálalo con:  {ayuda}')
+
+    # 3b) HyperFrames (el que renderiza): se baja solo con npx la primera vez, junto con su navegador
+    if shutil.which('npx') or (WIN and shutil.which('npx.cmd')):
+        print('preparando HyperFrames (la primera vez descarga el paquete y su navegador)…', flush=True)
+        try:
+            v = subprocess.run('npx --yes hyperframes --version', shell=True, capture_output=True, text=True, timeout=600)
+            nav = subprocess.run('npx --yes hyperframes browser ensure', shell=True, capture_output=True, text=True, timeout=900)
+            if v.returncode == 0 and nav.returncode == 0: ok.append('HyperFrames ' + (v.stdout.strip().splitlines() or ['?'])[-1])
+            else: falta.append('HyperFrames no quedó listo. Corre a mano:  npx --yes hyperframes browser ensure')
+        except Exception as e:
+            falta.append(f'HyperFrames ({e}). Corre a mano:  npx --yes hyperframes browser ensure')
 
     # 4) modelo de whisper
     if '--sin-whisper' not in sys.argv:

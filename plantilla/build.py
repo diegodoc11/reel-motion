@@ -21,6 +21,7 @@ import motor
 motor.iniciar(P, correcciones={'cloud': 'Claude'}, semilla=8597)      # correcciones: palabra mal oída por whisper -> correcta
 from motor import *                                                    # (después de iniciar)
 import minis as M                                                      # mini diseños CSS (collage, tarjetas de muestra)
+if '--guion' in sys.argv: guion(); sys.exit()                          # imprime la transcripción con tiempos y sale
 
 escenario('card', codigo_fondo='\n'.join([M.CODE_TXT] * 7))
 

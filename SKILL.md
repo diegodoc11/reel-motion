@@ -43,7 +43,8 @@ python "SKILL/scripts/instalar.py"
 ```
 
 Crea `SKILL/.venv`, instala las librerías, descarga el modelo de recorte (103 MB) y el de transcripción (3 GB) y
-revisa que existan `ffmpeg`, `npx` (Node 20+) y `whisper-cli` / `whisper-server` (whisper.cpp). Si algo dice
+revisa que existan `ffmpeg`, `npx` (Node 20+) y `whisper-cli` / `whisper-server` (whisper.cpp), y deja listo
+HyperFrames con su navegador. Si algo dice
 `[FALTA]`, instálalo tú con el comando que el propio instalador imprime (Windows: `scoop install ffmpeg
 whisper-cpp nodejs-lts` · Mac: `brew install ffmpeg whisper-cpp node`) y vuelve a correrlo hasta que diga
 "Listo para usar". Opciones: `--modelo-whisper medium` (1.5 GB, para computadores lentos).
@@ -138,7 +139,7 @@ Copia una plantilla a `P/build.py`:
   recetas). Copia de ahí las recetas que necesites (§5); no lo uses entero para otro guion.
 
 ```bash
-PY build.py --guion        # imprime las palabras con sus tiempos (para escribir f('…') sin adivinar)
+PY build.py --guion        # imprime las palabras con sus tiempos (para escribir f('…') sin adivinar; no necesita el recorte)
 PY build.py                # arma index.html + mezcla el audio (final_audio.wav)
 PY build.py --no-audio     # igual pero sin remezclar (rápido, para iterar lo visual)
 ```
