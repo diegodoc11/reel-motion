@@ -2,7 +2,9 @@
 """
 reel-motion · INSTALAR  (se corre UNA sola vez; se puede repetir sin problema)
 
-    python instalar.py [--modelo-whisper large-v3 | medium] [--sin-whisper]
+    python instalar.py [--modelo-whisper large-v3 | medium] [--sin-whisper] [--verificar]
+
+  --verificar : solo revisa (no crea nada ni descarga nada) e imprime qué hay y qué falta.
 
   1. crea un entorno de Python propio dentro de la skill (.venv) con lo necesario (numpy, pillow, opencv, onnxruntime)
   2. descarga el modelo de recorte de personas (Robust Video Matting, 103 MB)
@@ -34,23 +36,31 @@ def bajar(url, destino, nombre):
     os.replace(tmp, destino)
 
 def main():
-    print('reel-motion · instalación en', SKILL)
+    VERIF = '--verificar' in sys.argv
+    print('reel-motion · ' + ('verificación' if VERIF else 'instalación') + ' en', SKILL)
     if sys.version_info < (3, 10): raise SystemExit('Necesitas Python 3.10 o más nuevo.')
 
     # 1) entorno de Python
-    if not os.path.exists(PY):
-        print('creando entorno de Python (.venv)…', flush=True)
-        subprocess.run([sys.executable, '-m', 'venv', VENV], check=True)
-    print('instalando librerías (puede tardar unos minutos la primera vez)…', flush=True)
-    r = subprocess.run([PY, '-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '-r', os.path.join(SKILL, 'requirements.txt')])
-    (ok if r.returncode == 0 else falta).append('librerías de Python' + ('' if r.returncode == 0 else ' (pip falló: revisa tu conexión y vuelve a correr)'))
+    if VERIF:
+        if os.path.exists(PY):
+            r = subprocess.run([PY, '-c', 'import numpy, cv2, onnxruntime, PIL'], capture_output=True)
+            (ok if r.returncode == 0 else falta).append('librerías de Python' + ('' if r.returncode == 0 else ' (faltan: corre instalar.py sin --verificar)'))
+        else: falta.append('entorno .venv (corre instalar.py sin --verificar)')
+    else:
+        if not os.path.exists(PY):
+            print('creando entorno de Python (.venv)…', flush=True)
+            subprocess.run([sys.executable, '-m', 'venv', VENV], check=True)
+        print('instalando librerías (puede tardar unos minutos la primera vez)…', flush=True)
+        r = subprocess.run([PY, '-m', 'pip', 'install', '--quiet', '--disable-pip-version-check', '-r', os.path.join(SKILL, 'requirements.txt')])
+        (ok if r.returncode == 0 else falta).append('librerías de Python' + ('' if r.returncode == 0 else ' (pip falló: revisa tu conexión y vuelve a correr)'))
 
     # 2) modelo de recorte
     rvm = os.path.join(SKILL, 'modelos', 'rvm_resnet50_fp32.onnx')
-    if not os.path.exists(rvm):
+    if not os.path.exists(rvm) and not VERIF:
         try: bajar(RVM_URL, rvm, 'modelo de recorte (103 MB)')
         except Exception as e: falta.append(f'modelo de recorte ({e}). Descárgalo a mano de {RVM_URL} y ponlo en {rvm}')
-    if os.path.exists(rvm): ok.append('modelo de recorte')
+    if os.path.exists(rvm): ok.append('modelo de recorte  ' + rvm)
+    elif VERIF: falta.append('modelo de recorte (corre instalar.py sin --verificar para descargarlo)')
 
     # 3) programas
     for exe, nombre, ayuda in (('ffmpeg', 'ffmpeg', como('scoop install ffmpeg', 'brew install ffmpeg', 'sudo apt install ffmpeg')),
@@ -65,7 +75,7 @@ def main():
         print('preparando HyperFrames (la primera vez descarga el paquete y su navegador)…', flush=True)
         try:
             v = subprocess.run('npx --yes hyperframes --version', shell=True, capture_output=True, text=True, timeout=600)
-            nav = subprocess.run('npx --yes hyperframes browser ensure', shell=True, capture_output=True, text=True, timeout=900)
+            nav = v if VERIF else subprocess.run('npx --yes hyperframes browser ensure', shell=True, capture_output=True, text=True, timeout=900)
             if v.returncode == 0 and nav.returncode == 0: ok.append('HyperFrames ' + (v.stdout.strip().splitlines() or ['?'])[-1])
             else: falta.append('HyperFrames no quedó listo. Corre a mano:  npx --yes hyperframes browser ensure')
         except Exception as e:
@@ -75,10 +85,12 @@ def main():
     if '--sin-whisper' not in sys.argv:
         m = sys.argv[sys.argv.index('--modelo-whisper') + 1] if '--modelo-whisper' in sys.argv else 'large-v3'
         cands = [os.path.join(SKILL, 'modelos', f'ggml-{m}.bin'), os.path.expanduser(f'~/.cache/hyperframes/whisper/models/ggml-{m}.bin')]
-        if not any(os.path.exists(c) for c in cands):
+        if not any(os.path.exists(c) for c in cands) and not VERIF:
             try: bajar(WH_URL.format(m=m), cands[0], f'modelo de whisper {m} (~{"3 GB" if "large" in m else "1.5 GB"})')
             except Exception as e: falta.append(f'modelo de whisper ({e}). Descárgalo de {WH_URL.format(m=m)} a {cands[0]}')
-        if any(os.path.exists(c) for c in cands): ok.append(f'modelo de whisper {m}')
+        hay = [c for c in cands if os.path.exists(c)]
+        if hay: ok.append(f'modelo de whisper {m}  ' + hay[0])
+        elif VERIF: falta.append(f'modelo de whisper {m} (corre instalar.py sin --verificar para descargarlo)')
 
     # 5) acelerador para el recorte
     try:

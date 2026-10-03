@@ -42,7 +42,9 @@ la skill (lo crea el instalador). `P` = la carpeta del proyecto del reel.
 python "SKILL/scripts/instalar.py"
 ```
 
-Crea `SKILL/.venv`, instala las librerías, descarga el modelo de recorte (103 MB) y el de transcripción (3 GB) y
+(`--verificar` solo revisa, sin crear ni descargar nada.) Crea `SKILL/.venv`, instala las librerías, descarga el modelo
+de recorte (103 MB, a `SKILL/modelos/`) y el de transcripción (3 GB, a `SKILL/modelos/` o reutiliza el de
+`~/.cache/hyperframes/whisper/models/`) y
 revisa que existan `ffmpeg`, `npx` (Node 20+) y `whisper-cli` / `whisper-server` (whisper.cpp), y deja listo
 HyperFrames con su navegador. Si algo dice
 `[FALTA]`, instálalo tú con el comando que el propio instalador imprime (Windows: `scoop install ffmpeg
@@ -51,7 +53,7 @@ whisper-cpp nodejs-lts` · Mac: `brew install ffmpeg whisper-cpp node`) y vuelve
 
 Desde ahí usa SIEMPRE el Python de la skill:
 
-- Windows: `PY = "SKILL\.venv\Scripts\python.exe" -X utf8`
+- Windows: `PY = "SKILL/.venv/Scripts/python.exe" -X utf8` (con `/` también funciona en Git Bash y PowerShell)
 - Mac / Linux: `PY = "SKILL/.venv/bin/python"`
 
 Rutas con espacios SIEMPRE entre comillas. Si `SKILL/.venv` no existe, corre el instalador antes de cualquier
@@ -93,7 +95,7 @@ PY "SKILL/scripts/frases.py" "<P>"
 ```
 
 La transcripción normal ESCONDE las repeticiones (whisper las junta). Este script transcribe frase por frase el
-crudo y las deja ver. Lee la lista completa:
+crudo y las deja ver (~1 min por cada 30 s de video). Lee la lista completa:
 
 - Todo se lee de corrido → no hay nada que cortar; sigue.
 - Hay un arranque en falso o una frase repetida ("Ask… ¿Cómo se…? Ask Claude Council") → quita la toma MALA y deja
@@ -140,6 +142,7 @@ Copia una plantilla a `P/build.py`:
   recetas). Copia de ahí las recetas que necesites (§5); no lo uses entero para otro guion.
 
 ```bash
+cd "<P>"                   # los comandos de build, lint, snapshot y render se corren DENTRO de la carpeta del proyecto
 PY build.py --guion        # palabras con sus tiempos, YA con las correcciones aplicadas (f() busca el texto corregido); no necesita el recorte
 PY build.py                # arma index.html + mezcla el audio (final_audio.wav)
 PY build.py --no-audio     # igual pero sin remezclar (rápido, para iterar lo visual)
@@ -173,7 +176,10 @@ npx hyperframes render . --fps 30 --quality draft --sdr --output renders/borrado
 PY "SKILL/scripts/hoja.py" renders/borrador.mp4 _work/rev.jpg 0 <duración> 0.5 12 160
 ```
 
-Mira `_work/rev.jpg` (un cuadro cada 0.5 s con su segundo): ¿cada cosa entra cuando se dice?, ¿hay saltos raros?
+(`hoja.py <video> <salida> inicio fin paso columnas ancho_de_celda`; para más de 30 s haz dos hojas, p. ej. 0-20 y 20-40,
+para que el texto se lea.) Mira `_work/rev.jpg` (un cuadro cada 0.5 s con su segundo): ¿cada cosa entra cuando se
+dice?, ¿hay saltos raros? El render del borrador tarda ~6 min por minuto de video y necesita internet la primera vez
+(HyperFrames descarga GSAP).
 Entrégale el borrador al usuario y ajusta lo que pida. Para ver en vivo sin renderizar: `npx hyperframes preview`.
 **No exportes el final sin que el usuario apruebe el borrador.**
 
@@ -256,10 +262,26 @@ cerrar(musica='auto', volumen_musica=0.28)
 | `paper_svg(semilla)` | fondo del panel de papel para `split` |
 | `fx(t, 'pop'|'whoosh'|'swipe'|'click'|'ding'|'thump', volumen)` | efecto de sonido |
 | `flash(t)` | destello blanco de un cuadro |
-| `gancho · cabecera · lista · numero · cta` | piezas listas para `card` (ver sus docstrings y `build_minimo.py`) |
+| `gancho · cabecera · lista · numero · cta` | piezas listas para `card` (firmas abajo) |
 | `subtitulos(desde, hasta, propios, cambios, huecos)` | subtítulos palabra por palabra |
 | `capturas_provisionales(TH)` | miniaturas de escenas del propio reel (para polaroids) |
 | `cerrar(musica, inicio_musica, volumen_musica, css_extra)` | mezcla audio + escribe `index.html`. Siempre al final |
+
+**Las 5 piezas listas** (todas van en la zona de titulares del encuadre `card`; `t1=None` = se queda hasta el final; los
+textos admiten HTML y entidades como `&iacute;`; el antetítulo se escribe a máquina):
+
+| Pieza | Firma | Límites |
+|---|---|---|
+| `gancho(frase, hasta, saltos=(), acento=(), etiqueta='', marca='')` | palabras del inicio TAL CUAL `words.json`; `saltos` = índices tras los que hay salto de línea; `acento` = índices en color | 2-3 líneas de ≤ 18 letras |
+| `cabecera(idp, t0, t1, lineas=[(texto, t, color)], antetitulo='', top=334)` | cada línea sube en su segundo; color `''`, `'red'` o `'blu'` | 1-3 líneas; ≤ 13 letras = grande, ≤ 19 = mediano, ≤ 24 = pequeño |
+| `lista(idp, t0, t1, items=[(texto, t)], antetitulo='', top=350)` | fichas negras una por una | ≤ 4 ítems de ≤ 24 letras |
+| `numero(idp, t0, t1, cifra, t_cifra, rotulos=[(texto, t)], antetitulo='')` | cifra gigante (`'3%'`, `'$0'`, `'<u>+</u>7'`) + rótulos a la derecha | cifra de 2-4 caracteres; ≤ 2 rótulos de ≤ 7 letras |
+| `cta(idp, t0, palabra, t_palabra, apoyo='', t_apoyo=None, antetitulo='', verbo='Comenta', t_verbo=None)` | "Comenta" + caja roja con la PALABRA + línea de apoyo; se queda hasta el final | palabra ≤ 8 letras |
+
+Las piezas avisan en consola si lo último que entra se ve menos de 0.45 s antes de salir: en ese caso deja el bloque
+más tiempo (`t1` más tarde) o adelanta la entrada. Un `idp` es cualquier texto corto único (`'e3'`).
+Para el patrón "deja X, usa Y" (comparaciones) usa la receta 1b del ejemplo completo (fichas tachadas) o `lista`
+con `<s>…</s>` para tachar lo viejo y la última ficha en rojo.
 
 Clases CSS listas (`plantilla/style.css`, se copia a `P/style.css` y ahí la puedes ampliar): `.hd` contenedor de
 la zona de titulares · `.eb` antetítulo en mono (`.rd` rojo, `.dk` oscuro) · `.h1` titular gigante (≤13 letras),

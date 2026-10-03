@@ -63,7 +63,7 @@ cabecera('e8', t7, t8, antetitulo='MODELO OPUS 5.5', lineas=[('No.', f('no,', t7
 # 8 · dos NÚMEROS seguidos
 t9 = f('De hecho'); t10 = f('Ahora bien')
 numero('e9', t8, t9, '<u>+</u>7', f('una semana'), antetitulo='USÁNDOLO TODO EL DÍA', rotulos=[('d&iacute;as', f('semana')), ('de uso', f('usándolo'))])
-numero('e10', t9, t10, '3%', f('3%'), antetitulo='LA ANIMACIÓN MÁS PESADA', rotulos=[('de mi', f('mi uso')), ('uso', f('mi uso') + 0.25)])
+numero('e10', t9, t10, '3%', f('3%'), antetitulo='LA ANIMACIÓN MÁS PESADA', rotulos=[('del uso', f('de mi'))])
 
 # 9 · TITULARES
 t11 = f('Armé'); t12 = f('Si quieres')

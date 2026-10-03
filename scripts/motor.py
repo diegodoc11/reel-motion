@@ -128,6 +128,13 @@ class Cara:
         F = json.load(open(os.path.join(proj, 'face.json')))
         self.tr = [dict(x) for x in F['track'] if x.get('ok') and 150 <= x['w'] <= 620]
         if not self.tr: raise SystemExit('face.json no tiene detecciones de cara: revisa el video (¿se ve la cara de frente?)')
+        # detecciones falsas (una mano, un cuadro del fondo): lejos de la mediana o de otro tamaño -> fuera
+        mx = statistics.median([x['x'] + x['w'] / 2 for x in self.tr]); my = statistics.median([x['y'] + x['h'] / 2 for x in self.tr])
+        mw = statistics.median([x['w'] for x in self.tr])
+        buenas = [x for x in self.tr if abs(x['x'] + x['w'] / 2 - mx) < 0.7 * mw and abs(x['y'] + x['h'] / 2 - my) < 0.9 * mw and 0.55 * mw < x['w'] < 1.6 * mw]
+        if len(buenas) >= 5:
+            if len(buenas) < len(self.tr): print(f'  cara: {len(buenas)} detecciones válidas, {len(self.tr) - len(buenas)} descartadas (falsas)')
+            self.tr = buenas
         self.cx = statistics.median([x['x'] + x['w'] / 2 for x in self.tr]); self.cy = statistics.median([x['y'] + x['h'] / 2 for x in self.tr])
         self.chin_med = statistics.median([x['chin'] for x in self.tr])
         ch = sorted(x['chin'] for x in self.tr); self.chin_p90 = ch[int(len(ch) * 0.9)] if len(ch) > 4 else ch[-1]
@@ -417,6 +424,12 @@ def ir_a(estado, t, papel=None, sonido=True):
 # =====================================================================================================
 #  PIEZAS LISTAS (atajos de alto nivel para el encuadre 'card'; con esto ya sale un reel completo)
 # =====================================================================================================
+def _aviso_fugaz(idp, t_ultimo, t1):
+    """avisa si lo último que entra en un bloque se ve menos de 0.45 s antes de que el bloque salga."""
+    if t1 is not None and t1 - t_ultimo < 0.45:
+        print(f'  (aviso) {idp}: lo último entra en {t_ultimo:.2f}s y el bloque sale en {t1:.2f}s (se ve {t1 - t_ultimo:.2f}s). '
+              f'Déjalo más tiempo (t1 más tarde) o adelántalo.')
+
 def _clase_titular(lineas):
     largo = max(len(re.sub(r'<[^>]+>|&[a-z]+;', 'x', l)) for l in lineas)
     return 'h1' if largo <= 13 else ('h1 h1s' if largo <= 19 else 'h2')
@@ -447,6 +460,7 @@ def cabecera(idp, t0, t1, lineas, antetitulo='', top=334):
     win('#' + idp, t0)
     for i, (_, t, _) in enumerate(lineas):
         rise(f'#{idp}l{i}', t - 0.03); fx(t - 0.03, 'pop' if i else 'swipe', 0.16)
+    _aviso_fugaz(idp, max(t for _, t, _ in lineas), t1)
     if t1 is not None: leave('#' + idp, t1)
 
 def lista(idp, t0, t1, items, antetitulo='', top=350):
@@ -457,6 +471,7 @@ def lista(idp, t0, t1, items, antetitulo='', top=350):
     win('#' + idp, t0)
     for i, (_, t) in enumerate(items):
         I(f'#{idp}i{i}', clipPath='inset(0% 100% 0% 0%)'); T(f'#{idp}i{i}', t - 0.03, 0.26, 'power2.out', clipPath='inset(0% 0% 0% 0%)'); fx(t - 0.03, 'pop', 0.18)
+    _aviso_fugaz(idp, max(t for _, t in items), t1)
     if t1 is not None: leave('#' + idp, t1)
 
 def numero(idp, t0, t1, cifra, t_cifra, rotulos=(), antetitulo=''):
@@ -471,6 +486,7 @@ def numero(idp, t0, t1, cifra, t_cifra, rotulos=(), antetitulo=''):
                  f'<div class="ncol" style="margin-top:{int(fs * 0.16)}px">{col}</div></div></div>')
     win('#' + idp, t0); I(f'#{idp}n', yPercent=105); T(f'#{idp}n', t_cifra - 0.08, 0.42, 'power3.out', yPercent=0); fx(t_cifra - 0.08, 'thump', 0.3)
     for i, (_, t) in enumerate(rotulos[:2]): rise(f'#{idp}r{i}', t - 0.02, 0.3)
+    _aviso_fugaz(idp, max([t_cifra] + [t for _, t in rotulos[:2]]), t1)
     if t1 is not None: leave('#' + idp, t1)
 
 def cta(idp, t0, palabra, t_palabra, apoyo='', t_apoyo=None, antetitulo='', verbo='Comenta', t_verbo=None):

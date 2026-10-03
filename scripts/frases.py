@@ -60,6 +60,10 @@ def main():
                 segs.append((i * 0.01, j * 0.01)); i = j
             else: i += 1
         segs = [(s, e) for s, e in segs if e - s >= 0.08]
+        print(f'{len(segs)} tramos entre silencios; transcribiendo uno por uno (~1 min por cada 30 s de video)…', flush=True)
+        if len(segs) <= 3:
+            print('  (aviso) este orador casi no hace pausas: dentro de un tramo largo NO se pueden ver repeticiones. '
+                  'Lee el guion de preparar.py con calma buscando frases repetidas.', flush=True)
 
         def transcribir(s, e):
             pad = 0.12; i0 = max(0, int((s - pad) * sr)); i1 = min(len(a), int((e + pad) * sr))
