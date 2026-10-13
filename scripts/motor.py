@@ -85,7 +85,7 @@ def cargar_palabras(proj, correcciones=None, separar_y=True):
     for w in Wd:
         t = w['text']
         # whisper pega la "Y" a la palabra siguiente ("Yyo") -> separar
-        if separar_y and re.match(r'^Y[a-záéíóúñ]', t) and t.lower() not in ('ya', 'yo', 'yoga'):
+        if separar_y and re.match(r'^Y[a-záéíóúñ]', t) and t.lower() not in ('ya', 'yo', 'yoga') and not any(c.isupper() for c in t[1:]):   # YouTube no se parte
             mid = w['start'] + 0.08
             out.append({'text': 'Y', 'start': w['start'], 'end': mid}); out.append({**w, 'text': t[1:], 'start': mid}); continue
         out.append(dict(w))
@@ -549,8 +549,8 @@ def subtitulos(desde=0.0, hasta=None, propios=('Claude', 'Code', 'Opus'), cambio
             a = max(0, w['start'] - 0.03); b = (ch[j + 1]['start'] - 0.03) if j + 1 < len(ch) else hide
             if b - a < 0.05: continue
             sp = ''.join(f'<span class="{"on" if i == j else ""}">{html.escape(x["text"].strip(",."))}</span>' for i, x in enumerate(ch[:j + 1]))
-            caps.append(f'<div class="cap" id="k{_n_caps}" style="top:{y - 34}px">{sp}</div>')
-            I(f'#k{_n_caps}', opacity=0); S(f'#k{_n_caps}', a, opacity=1); S(f'#k{_n_caps}', b, opacity=0); _n_caps += 1
+            caps.append(f'<div class="cap" id="subt{_n_caps}" style="top:{y - 34}px">{sp}</div>')      # ids 'subt…': no chocan con ids del build
+            I(f'#subt{_n_caps}', opacity=0); S(f'#subt{_n_caps}', a, opacity=1); S(f'#subt{_n_caps}', b, opacity=0); _n_caps += 1
     _n_grupos += len(chunks)
     return chunks
 

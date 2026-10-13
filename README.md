@@ -17,7 +17,7 @@ Hecha por [Diego Osorio](https://instagram.com/soydiegoosorio).
 ## Instalar (copia y pega esto en Claude Code)
 
 ```
-Instala esta skill de Claude Code: clónala desde https://github.com/diegodoc11/reel-motion dentro de ~/.claude/skills/reel-motion y corre su instalador (scripts/instalar.py). Si falta algún programa, instálalo conmigo paso a paso.
+Instala esta skill de Claude Code: clónala desde https://github.com/diegodoc1111/reel-motion dentro de ~/.claude/skills/reel-motion y corre su instalador (scripts/instalar.py). Si falta algún programa, instálalo conmigo paso a paso.
 ```
 
 Claude clona la skill, crea su propio entorno, descarga los modelos (unos 4 GB en total) y revisa que tengas
@@ -26,14 +26,14 @@ ffmpeg, Node.js y whisper.cpp. Si falta algo, te dice qué instalar.
 ¿Prefieres hacerlo a mano? En Windows (PowerShell):
 
 ```powershell
-git clone https://github.com/diegodoc11/reel-motion "$HOME\.claude\skills\reel-motion"
+git clone https://github.com/diegodoc1111/reel-motion "$HOME\.claude\skills\reel-motion"
 python "$HOME\.claude\skills\reel-motion\scripts\instalar.py"
 ```
 
 En Mac o Linux:
 
 ```bash
-git clone https://github.com/diegodoc11/reel-motion ~/.claude/skills/reel-motion
+git clone https://github.com/diegodoc1111/reel-motion ~/.claude/skills/reel-motion
 python3 ~/.claude/skills/reel-motion/scripts/instalar.py
 ```
 
@@ -102,8 +102,8 @@ Lo pesado (transcribir, recortar, renderizar) corre en tu computador y no gasta 
 | Skill | Tú en el video | Para qué |
 |---|---|---|
 | **reel-motion** (esta) | Grabado y recortado dentro de un diseño animado | Reels que se ven producidos por un estudio |
-| [video-imperio-edit](https://github.com/diegodoc11/video-imperio-edit) | Grabado, a pantalla completa | Edición clásica: zooms, subtítulos, material de apoyo |
-| [anuncios-animados](https://github.com/diegodoc11/anuncios-animados) | No apareces | Anuncio animado a partir de un guion, con voz de IA |
+| [video-imperio-edit](https://github.com/diegodoc1111/video-imperio-edit) | Grabado, a pantalla completa | Edición clásica: zooms, subtítulos, material de apoyo |
+| [anuncios-animados](https://github.com/diegodoc1111/anuncios-animados) | No apareces | Anuncio animado a partir de un guion, con voz de IA |
 
 ## Qué trae
 
