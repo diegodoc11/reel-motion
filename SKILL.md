@@ -2,13 +2,14 @@
 name: reel-motion
 description: >-
   Convierte un video VERTICAL de una persona hablando a cámara en un reel de MOTION GRAPHICS hecho 100 % con
-  código: RECORTA al presentador del fondo y lo monta sobre una tarjeta de color, con titulares que aparecen
-  palabra por palabra, terminales, papel rasgado, collage, contadores, polaroids, mascota, subtítulos, música y
-  efectos, todo sincronizado con lo que dice (HyperFrames + GSAP). Úsala cuando pidan "anima este video",
-  "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "hazlo como el reel de
-  las animaciones hechas con código", "estilo animador", o invoquen /reel-motion. NO es para dejar el video
-  real a pantalla completa con zooms, b-roll y subtítulos (eso es video-ad-editing), NI para crear un video
-  animado SIN presentador a partir de un guion (eso es anuncios-animados o video-explainer).
+  código: RECORTA al presentador del fondo y lo monta sobre una tarjeta de color, con titulares palabra por
+  palabra, cifras, listas, subtítulos, música y efectos sincronizados con lo que dice (HyperFrames + GSAP). Dos
+  estilos: "collage" (por defecto: fondo claro, papel rasgado, polaroids, mascota) y "noche" (fondo tinta con
+  grilla, pasos numerados, contadores, chats de WhatsApp, nodos, tachados). Úsala cuando pidan "anima este
+  video", "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "edítalo con
+  reel-motion estilo collage / estilo noche", "estilo animador", o invoquen /reel-motion. NO es para dejar el
+  video real a pantalla completa con zooms y b-roll (eso es video-ad-editing), NI para un video animado SIN
+  presentador a partir de un guion (eso es anuncios-animados o video-explainer).
 ---
 
 # reel-motion — el presentador recortado dentro de un diseño animado
@@ -68,7 +69,85 @@ otra cosa (no instales librerías en el Python global).
    haya en `SKILL/recursos/musica/` (`musica='auto'`). Sin pista, el reel sale con voz y efectos y se avisa.
 5. **Fotos propias**, solo si el guion las menciona ("mis fotos", "mis resultados"): muéstrale opciones y que elija.
 
-No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú.
+No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú. El **estilo** tampoco se pregunta:
+usa el que pida ("estilo collage", "estilo noche") o elígelo con la tabla de §1b.
+
+## 1b. Estilos: collage (por defecto) y noche
+
+| | **collage** (por defecto) | **noche** |
+|---|---|---|
+| Cómo lo piden | "anima este video", "edítalo con reel-motion" (sin decir estilo), "estilo collage" | "edítalo con reel-motion **estilo noche**", "fondo oscuro", "como el de los pasos / el de las 10 automatizaciones / el de chat vs agente" |
+| Cómo se ve | fondo claro, papel rasgado, fotos y polaroids, mascota, titulares escritos a mano, varios fondos de color | fondo TINTA con grano + grilla que deriva + viñeta y marcas de corte; tarjeta roja con el presentador; papel crema con grano y borde rasgado; UN acento |
+| Conviene para | historias, confesiones, demostraciones ("mira lo que hice"), fotos propias, cambios de estilo | pasos, listas ("N cosas que…"), procesos, comparaciones ("deja X, usa Y"), cifras y metas, chats/automatizaciones |
+| Plantilla | `plantilla/build_minimo.py` + recetas de `plantilla/build.py` (§5) | `plantilla/build_noche.py` + piezas de `plantilla/noche.py` (tabla de abajo) |
+| Encuadres | card · full · split | card ↔ split (no usa full) |
+
+Si no dice estilo: **collage**, salvo que el guion sea claramente de pasos, lista numerada, proceso o comparación:
+ahí usa **noche** y avísalo en una línea ("lo armé en estilo noche porque es una lista de pasos; si lo prefieres
+collage, lo cambio"). Los dos estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos.
+
+### Cómo se arma un reel estilo noche
+
+Copia `SKILL/plantilla/build_noche.py` a `P/build.py` (es un reel real de 35 s con 8 piezas distintas) y cambia solo
+el bloque ESCENAS. Lo que cambia frente al estilo collage:
+
+- El encabezado agrega `SKILL/plantilla` al `sys.path` e importa `import noche as N` (después de `from motor import *`).
+- `N.escenario()` en vez de `escenario('card')` · `N.cerrar(musica=…)` en vez de `cerrar()` (mete el papel, el CSS
+  del estilo y limpia efectos encimados).
+- Cambios de encuadre con `N.a_split(t, pp)` / `N.a_card(t)` en vez de `ir_a()` (además esconden y muestran el
+  fondo, el riel y la sombra). Cada tramo en split lleva su panel: `pp = N.papel('pp1')`. `a_split(t, pp, recorte=True)`
+  deja debajo del papel al presentador RECORTADO sobre la tinta (más "noche"); sin eso se ve la toma real con su fondo.
+- Las piezas van en la zona de gráficos de la tarjeta (x 78-1002, y 262-740) o DENTRO del papel con `en=pp`
+  (los colores se adaptan solos: crema sobre tinta, tinta sobre papel).
+- Todas las piezas: `idp` corto y único ('e1', 'e2'…), tiempos con `f()`, textos con HTML y entidades, tamaño de
+  letra automático (avisan si algo no cabe o si lo último se ve menos de 0.45 s). Docstrings completas en `noche.py`.
+- Si el recorte trae una mancha en el cuadro 0 (pasa: el modelo tarda unos cuadros en "agarrar"), mírala en la
+  captura del segundo 0 y tápala con `N.tapar(x, y, ancho, alto)`.
+- Las 5 piezas del motor (`gancho`, `cabecera`, `lista`, `numero`, `cta`) también se leen sobre la tinta (el CSS
+  del estilo las pasa a crema), pero sus antetítulos son de 24 px: para cumplir la vara (≥ 40 px) usa las de `N.`.
+
+| Pieza | Firma | Úsala para | Límites |
+|---|---|---|---|
+| `gancho` | `N.gancho(frase, hasta, saltos=(), acento=(), antetitulo='', caja=None)` | titular palabra por palabra desde el cuadro 0 | ≤ 80 px, 1-3 líneas; debajo cabe una pieza (`escalera(y0=400)`, `bateria`) |
+| `titular` | `N.titular(idp, t0, t1, lineas=[(texto, t, color)], antetitulo='', caja=None, x=78, y=None, en=None)` | antetítulo + 1-3 líneas que suben + caja roja con golpe ('DISTINTO.') | 56-80 px automático; color `''`/`'ac'`/`'g2'` |
+| `slam` | `N.slam(idp, t, texto, icono=None, t1=None, sub=[(texto, t)], t_encoge=None, acercar=None)` | LA palabra clave en losa roja gigante (destello + sacudida); `t_encoge` la vuelve encabezado | ≤ 9 letras a 172 px |
+| `contador` | `N.contador(idp, t0, t1, desde, hasta, t_ini, t_fin, prefijo='', sufijo='', antetitulo='', caja=None, rotulo=None)` | cifra gigante que cuenta ($0 → $5.000, 100 % → 0 %) + barra + golpe | hasta 200 px; punto de miles |
+| `bateria` | `N.bateria(idp, t0, t1, t_llena, t_vacia, t_cero, etiqueta='', y=486)` | algo que se vacía ("si perdiera todo lo que sé") | va debajo de un titular |
+| `paso` | `N.paso(idp, n, total, t, t_sale, lineas=[…], antetitulo='', caja=None, hasta=None, pausas=())` | pestaña roja "PASO n" (cifra 200 px) que vuela a la píldora "PASO n / total" | contenido a la derecha (x 390); deja libre la esquina de la píldora |
+| `riel` | `R = N.riel(idp, total, t, iconos=None, t_fin=None)` · `R.actual(i, t)` · `R.hecho(i, t)` · `R.completo(t)` | progreso 01→N a la izquierda de la tarjeta (en split se esconde solo) | ≤ 10 casillas |
+| `tarjeta_numerada` | `N.tarjeta_numerada(idp, n, total, t0, t1, titulo, t_titulo, antetitulo='', icono=None, sub='', chat=None, t_chat=None, nombre_chat='WhatsApp', ficha=None, sello=None, riel=None)` | "N cosas": número 200 px + icono + n/total; con `chat` se reacomoda y sube un WhatsApp; con `riel` vuela a su casilla | título ≤ 20 letras |
+| `whatsapp` | `N.whatsapp(idp, t0, t1, mensajes=[(lado, texto, t[, t_escribiendo])], nombre='Cliente', insignia='AGENTE IA', fichas=[(texto, t)])` | chat que se contesta solo: escribiendo…, burbujas de 40 px, scroll, doble check, `bot=True`, `rayo=t` | se parte solo; ≤ 6-7 mensajes |
+| `checklist` | `N.checklist(idp, t0, t1, items=[(texto, t)], titulo='', marca=None, en=None)` | casillas dibujadas a mano que se marcan ✓; `marca=('HOY', t)` encerrada | ≤ 5 ítems de ≤ 24 letras |
+| `escalera` | `N.escalera(idp, t0, t1, pasos=[(texto, t)], t_tacha=None, titulo='', y0=None, en=None)` | pasos en escalera con número en círculo; `t_tacha` tacha todos (el orden equivocado) | 2-5 pasos |
+| `lista_tachada` | `N.lista_tachada(idp, t0, t1, items=[(texto, t, t_tacha, icono)], titulo='', en=None)` | "olvídate de…" (se tachan con ✗); `t_tacha=None` = la que se salva (en acento): "deja X, usa Y" | 1-4 ítems; 4 = cuadrícula 2×2 |
+| `nodos` | `N.nodos(idp, t0, t1, nodos=[(etiqueta, icono, t)], bucle=None, notas=[(texto, t_in, t_out)], titulo=None, y0=None, en=None)` | proceso o cadena que se ENCIENDE nodo por nodo + bucle que vuelve al inicio | 2-6 nodos; ≤ 9 letras si van 3 por fila |
+| `comparar` | `N.comparar(idp, t0, t1, malo=(etiqueta, texto, t, t_tacha), bueno=(etiqueta, texto, t, t_ok[, sub, t_sub]), titulo=None, vs=False, escribir=False, en=None)` | dos tarjetas: lo que NO (tachado + ✗) y lo que SÍ (acento + ✓) | ≤ 22 letras por texto |
+| `sello` | `N.sello(idp, texto, t, x=None, y=430, rot=-6, tam=100, giro=False, t1=None, en=None)` | sello de goma con golpe ('AL REVÉS', 'VENDIDO'); `giro=True` entra girando | ≤ 12 letras a 100 px |
+| `notas` | `N.notas(idp, t0, t1, notas=[(rotulo, valor, t)], y=384, en=None)` | notas con cinta que se pegan de golpe ('CLIENTE' 1 · 2 · 3) | 1-3 notas |
+| `cta_sigueme` | `N.cta_sigueme(idp, t0, t_sigueme, lineas=[…], antetitulo='', usuario='', t_boton=None)` | cierre "SÍGUEME" gigante; si entra antes, un cursor lo toca al decirlo | 0-2 líneas |
+| `cta_palabra` | `N.cta_palabra(idp, t0, palabra, t_palabra, verbo='Comenta', apoyo='', antetitulo='')` | cierre "Comenta PALABRA" | palabra ≤ 8 letras |
+| ayudas | `N.zoom(t, escala)` · `N.tapar(x, y, w, h)` · `N.icono(nombre, tam, color)` (lista en `N.ICONOS`) · `N.entra / golpe / sube / sale / dibuja / sacude` | zoom del recorte · tapar la mancha del cuadro 0 · iconos · golpes para piezas propias | — |
+
+Para una pieza nueva: `<div class="nz" id="…">` con hijos en posición absoluta (como hacen las de `noche.py`),
+colores con las variables `var(--ntx)` (texto) y `var(--nac)` (acento) para que sirva en tinta y en papel, y entradas
+con `N.entra()` / `N.golpe()`. Estilos propios en `css_extra=` de `N.cerrar()`; clases que empiecen por "n" y nunca
+`.tx .qc .ul .ph .cl .in` (ya existen en `style.css`). Texto suelto junto a un icono, siempre dentro de un `<span>`.
+
+### La vara de calidad del estilo noche (lo que hizo que esos reels gustaran)
+
+1. **Encuadre estándar**: tarjeta en y 759, presentador a 0.8. Lo pone el motor: no lo cambies.
+2. **Zona de gráficos LLENA**: x 78-1002 · y 262-740 ocupada en cada momento. Un titular suelto en 478 px de alto se
+   ve vacío: acompáñalo con una cifra, una caja, una batería o una lista.
+3. **Tamaños**: texto ≥ 40 px (nada más chico, ni en chats ni en etiquetas) · titulares 56-80 px · cifras 120-200 px.
+4. **UNA pieza grande por momento**: la anterior sale (o se encoge a encabezado) antes de que entre la siguiente.
+5. **Fondo con carácter**: tinta con grano + grilla que deriva + viñeta en card; papel con grano, puntos y borde
+   rasgado en split. Nunca un color plano.
+6. **Un solo acento**: el rojo de marca (o el color que pida el usuario). Crema para el texto, gris para antetítulos.
+7. **Entradas con golpe**: `back.out` / `expo.out` + pop / thump; slams con destello y sacudida para las palabras
+   clave; cifras que cuentan y frenan al final.
+8. **Cambio card ↔ split cada 2-3 escenas** (en un reel de 35 s, 2 tramos en papel; en uno de 90 s, 4-5).
+9. **Nada de tramos con solo un antetítulo**: si una frase no tiene pieza, alarga la anterior o ponle una.
+10. **Sincronía**: cada cosa entra en `f('palabra') - 0.03`, una por una (listas, nodos, burbujas, casillas).
 
 ## 2. Flujo de trabajo
 
@@ -123,14 +202,15 @@ debe verse completo sobre rojo, sin pedazos del fondo ni huecos. Si se cuelan ob
 
 ### 2.4 Plan de escenas (antes de escribir código)
 
-Parte el guion en **escenas de 2 a 6 segundos, una idea por escena**, y escribe la tabla en `P/_work/plan.md`:
+Parte el guion en **escenas de 2 a 6 segundos, una idea por escena**, y escribe la tabla en `P/_work/plan.md`
+(arriba, el estilo elegido —collage o noche— y por qué):
 
 | # | Frase (palabras exactas de words.json) | Encuadre | Pieza | Qué se ve y cuándo entra cada cosa |
 |---|---|---|---|---|
 
-Cómo elegir (ver §3 y §5): el gancho siempre con titular desde el segundo 0; `card` es la base; cambia de
-encuadre cada 2-3 escenas; no repitas la misma pieza dos veces seguidas; los números van gigantes; las listas
-aparecen ítem por ítem; el cierre es el CTA con la palabra clave.
+Cómo elegir (ver §3 y §5; en estilo noche, la tabla y la vara de §1b): el gancho siempre con titular desde el
+segundo 0; `card` es la base; cambia de encuadre cada 2-3 escenas; no repitas la misma pieza dos veces seguidas; los
+números van gigantes; las listas aparecen ítem por ítem; el cierre es el CTA con la palabra clave.
 
 ### 2.5 Construir
 
@@ -140,6 +220,8 @@ Copia una plantilla a `P/build.py`:
   y 5 piezas (`gancho`, `cabecera`, `lista`, `numero`, `cta`). Cambias el bloque ESCENAS y ya funciona.
 - `SKILL/plantilla/build.py` → el reel de referencia completo (59 s, 9 escenas, los 3 encuadres y todas las
   recetas). Copia de ahí las recetas que necesites (§5); no lo uses entero para otro guion.
+- `SKILL/plantilla/build_noche.py` → **estilo noche**: reel completo de 35 s (card ↔ papel, 8 piezas de
+  `plantilla/noche.py`). Cambias el bloque ESCENAS con las piezas de la tabla de §1b.
 
 ```bash
 cd "<P>"                   # los comandos de build, lint, snapshot y render se corren DENTRO de la carpeta del proyecto
@@ -159,13 +241,15 @@ npx hyperframes snapshot . --at 1.2,4.8,9.5 --no-end --timeout 60000 -o snaps   
 
 (El aviso `composition_file_too_large` es normal.) Elige para cada escena un segundo ~0.5 s después de que entró
 su último elemento, abre `snaps/contact-sheet*.jpg` (una hoja por cada 9 cuadros) y **míralas**. Mira también +0.2 s y
-+0.45 s después de cada `ir_a()` (ahí es donde se montan las cosas). Lista de control:
++0.45 s después de cada `ir_a()` / `N.a_split()` / `N.a_card()` (ahí es donde se montan las cosas), y el segundo 0
+(manchas del recorte). Lista de control:
 
 - [ ] Nada tapa la cara ni la boca (ni piezas ni subtítulos).
 - [ ] Todo el texto cabe: nada cortado por el borde derecho ni montado sobre otra cosa.
 - [ ] Cada escena tiene su pieza visible (no hay escenas "vacías" solo con la tarjeta).
 - [ ] Los subtítulos no chocan con ninguna pieza.
 - [ ] Ortografía y tildes; nombres propios bien escritos (`correcciones=`).
+- [ ] Estilo noche: la vara de §1b (zona llena, texto ≥ 40 px, una pieza grande por momento, un solo acento).
 
 Corrige y repite hasta que pase. No muestres nada sin haber mirado tú las capturas.
 
@@ -224,7 +308,8 @@ La interfaz de Instagram/TikTok tapa arriba (0-250), abajo (1650-1920) y la colu
 
 ## 4. El motor (`SKILL/scripts/motor.py`)
 
-Encabezado fijo de todo `build.py` (el orden importa: `iniciar()` va ANTES del `from motor import *`):
+Encabezado fijo de todo `build.py` (el orden importa: `iniciar()` va ANTES del `from motor import *`; el estilo
+noche además agrega `SKILL/plantilla` al `sys.path` e importa `noche as N`: ver `plantilla/build_noche.py`):
 
 ```python
 import sys, os
@@ -290,7 +375,7 @@ la zona de titulares · `.eb` antetítulo en mono (`.rd` rojo, `.dk` oscuro) · 
 `.paper` panel de papel (`.ser` serif, `.hw` manuscrita, `.pol` polaroid, `.coin`, `.msc`) · `.qc` tarjeta
 flotante · `.big7` número gigante · `.hbar` barra · `.grid` cuadrícula · `.vbox` caja del CTA · `.cap` subtítulos.
 
-## 5. Recetas (están en `SKILL/plantilla/build.py`, numeradas igual)
+## 5. Recetas del estilo collage (están en `SKILL/plantilla/build.py`, numeradas igual)
 
 | # | Receta | Encuadre | Úsala para |
 |---|---|---|---|
@@ -320,7 +405,8 @@ hace la receta más parecida y copia su estructura.
    no repite el subtítulo.
 3. **Ritmo**: algo cambia cada 2-4 s. Lo anterior sale ~0.15 s antes de que entre lo nuevo (`leave`).
 4. **Variedad**: alterna encuadres y piezas; al menos 3 cambios de encuadre cada 30 s en la versión completa.
-5. **Color**: un acento + tinta + fondo claro. El segundo color solo para un golpe de énfasis.
+5. **Color**: un acento + tinta + fondo claro (collage) · un acento + crema sobre tinta (noche, §1b). El segundo
+   color solo para un golpe de énfasis.
 6. **Sonido**: `pop` en entradas, `whoosh` en cambios de encuadre (lo pone `ir_a`), `ding` en la revelación,
    `thump` en cifras grandes. Volúmenes bajos (0.12-0.30). La música va por debajo de la voz (0.25-0.30).
 7. **Listas una por una**, nunca todas de golpe.
@@ -346,7 +432,7 @@ hace la receta más parecida y copia su estructura.
 ## 8. Qué entregar
 
 1. El borrador (`renders/borrador.mp4`) y, tras el OK, el final (`renders/<nombre>-FINAL.mp4`) verificado.
-2. Dos líneas: qué se hizo y qué puede cambiar el usuario (color, música, textos, fotos).
+2. Dos líneas: qué se hizo (y en qué estilo) y qué puede cambiar el usuario (estilo, color, música, textos, fotos).
 3. Nunca publiques ni subas nada por tu cuenta: publicar es decisión del usuario.
 
 Créditos y licencias: ver `README.md`.

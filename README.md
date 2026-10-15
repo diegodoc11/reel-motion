@@ -45,6 +45,20 @@ Graba tu video, ábrelo en Claude Code y dile:
 Anima este video con reel-motion: C:\Videos\mi-video.mp4
 ```
 
+## Dos estilos
+
+| | **collage** (por defecto) | **noche** |
+|---|---|---|
+| Pídelo así | "Anima este video con reel-motion" o "…estilo collage" | "Edítalo con reel-motion **estilo noche**" |
+| Se ve | Fondo claro, papel rasgado, fotos y polaroids, mascota, titulares a mano | Fondo tinta con grilla que se mueve, tarjeta roja, papel crema con borde rasgado, un solo color de acento |
+| Ideal para | Historias, confesiones, demostraciones, "mira lo que hice" | Pasos, listas ("10 cosas que…"), procesos, comparaciones, cifras, chats de WhatsApp |
+
+El estilo noche trae piezas listas: pestañas de **PASO 1 de 5**, cifras que cuentan ($0 → $5.000), baterías que se
+vacían, listas que se tachan, tarjetas numeradas que vuelan a un riel de progreso, un **chat de WhatsApp que se
+contesta solo**, cadenas de pasos que se encienden, comparaciones con ✗ y ✓, sellos y el cierre "Sígueme".
+
+![Piezas del estilo noche](docs/noche.jpg)
+
 Claude hace todo esto solo:
 
 1. **Limpia el video**: quita los silencios largos y las frases que repetiste por equivocarte.
@@ -56,6 +70,7 @@ Claude hace todo esto solo:
 
 ## Qué puedes pedirle
 
+- "Hazlo en estilo noche" (o "en estilo collage").
 - "Cambia el rojo por el azul de mi marca."
 - "Ponle esta música" (deja tu canción en `recursos/musica/` dentro de la skill, o pásale la ruta).
 - "Cuando digo *mis resultados*, muestra estas fotos."
@@ -108,7 +123,7 @@ Lo pesado (transcribir, recortar, renderizar) corre en tu computador y no gasta 
 ## Qué trae
 
 ```
-SKILL.md                 instrucciones para Claude (flujo, lienzo, recetas, reglas)
+SKILL.md                 instrucciones para Claude (flujo, estilos, lienzo, recetas, reglas)
 scripts/
   instalar.py            entorno + modelos + revisión de programas
   preparar.py            cortes, transcripción por palabra, seguimiento de la cara
@@ -117,9 +132,11 @@ scripts/
   motor.py               el motor: cámara con 3 encuadres, piezas, subtítulos, audio
   hoja.py · foto.py      hoja de revisión con tiempos · preparar fotos
 plantilla/
-  build_minimo.py        reel completo con 5 piezas: el punto de partida
-  build.py               el reel de ejemplo completo, con todas las recetas
+  build_minimo.py        estilo collage: reel completo con 5 piezas, el punto de partida
+  build.py               estilo collage: el reel de ejemplo completo, con todas las recetas
   minis.py · style.css   mini diseños para collages · estilos
+  build_noche.py         estilo noche: reel completo de ejemplo (8 piezas)
+  noche.py · noche.css   las piezas del estilo noche (pasos, contadores, WhatsApp, nodos, tachados…)
 recursos/                fuentes, efectos de sonido, logos (y tu música)
 ```
 
