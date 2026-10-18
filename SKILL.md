@@ -148,6 +148,12 @@ con `N.entra()` / `N.golpe()`. Estilos propios en `css_extra=` de `N.cerrar()`; 
 8. **Cambio card ↔ split cada 2-3 escenas** (en un reel de 35 s, 2 tramos en papel; en uno de 90 s, 4-5).
 9. **Nada de tramos con solo un antetítulo**: si una frase no tiene pieza, alarga la anterior o ponle una.
 10. **Sincronía**: cada cosa entra en `f('palabra') - 0.03`, una por una (listas, nodos, burbujas, casillas).
+11. **La pantalla TRADUCE lo que dice, palabra por palabra** (es lo que más valora el usuario, probado a ciegas): por
+    cada frase pregúntate "¿qué de esto se ve y con qué palabra entra?". Las órdenes y citas literales del guion se
+    ESCRIBEN en pantalla con su palabra (`sube`/`escribe` por palabra, p. ej. en una barra de mensaje dentro de la
+    tarjeta); cada idea tiene una pieza que la representa (tarjeta que vuela al riel = etapa cumplida, tachado = lo
+    que se deja, check = lo nuevo); las transiciones siguen el orden del discurso. Un reel técnicamente pulido pero
+    con piezas genéricas pierde contra uno que va explicando cada frase. Ejemplo completo: `plantilla/ejemplo_evolucion.py`.
 
 ## 2. Flujo de trabajo
 
@@ -252,6 +258,14 @@ su último elemento, abre `snaps/contact-sheet*.jpg` (una hoja por cada 9 cuadro
 - [ ] Estilo noche: la vara de §1b (zona llena, texto ≥ 40 px, una pieza grande por momento, un solo acento).
 
 Corrige y repite hasta que pase. No muestres nada sin haber mirado tú las capturas.
+
+Después del render del borrador (§2.7) corre también los chequeos objetivos que al ojo se le pasan:
+
+```bash
+PY "SKILL/scripts/verificar_reel.py" .        # portada con gráficos en el cuadro 0 · música hasta el último cuadro · cortes de la pista
+```
+
+Si marca ✗, arréglalo y vuelve a renderizar; los ⚠ se miran en `_work/verificar/`.
 
 ### 2.7 Borrador para aprobación
 
