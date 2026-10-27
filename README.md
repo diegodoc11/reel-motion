@@ -45,19 +45,26 @@ Graba tu video, ábrelo en Claude Code y dile:
 Anima este video con reel-motion: C:\Videos\mi-video.mp4
 ```
 
-## Dos estilos
+## Tres estilos
 
-| | **collage** (por defecto) | **noche** |
-|---|---|---|
-| Pídelo así | "Anima este video con reel-motion" o "…estilo collage" | "Edítalo con reel-motion **estilo noche**" |
-| Se ve | Fondo claro, papel rasgado, fotos y polaroids, mascota, titulares a mano | Fondo tinta con grilla que se mueve, tarjeta roja, papel crema con borde rasgado, un solo color de acento |
-| Ideal para | Historias, confesiones, demostraciones, "mira lo que hice" | Pasos, listas ("10 cosas que…"), procesos, comparaciones, cifras, chats de WhatsApp |
+| | **collage** (por defecto) | **noche** | **recrear** |
+|---|---|---|---|
+| Pídelo así | "Anima este video con reel-motion" o "…estilo collage" | "Edítalo con reel-motion **estilo noche**" | "Edítalo con reel-motion **estilo recrear**" + el video viral |
+| Se ve | Fondo claro, papel rasgado, fotos y polaroids, mascota, titulares a mano | Fondo tinta con grilla que se mueve, tarjeta roja, papel crema con borde rasgado, un solo color de acento | Un informe: cuadrícula, encabezado tipo reporte, tú chico en la esquina y arriba un escenario donde el hecho viral se **recrea en dibujo**; pasa a plano azul cuando analizas |
+| Ideal para | Historias, confesiones, demostraciones, "mira lo que hice" | Pasos, listas ("10 cosas que…"), procesos, comparaciones, cifras, chats de WhatsApp | "Mira lo que hizo esta marca", noticias virales, casos de estudio con precios y cifras |
 
 El estilo noche trae piezas listas: pestañas de **PASO 1 de 5**, cifras que cuentan ($0 → $5.000), baterías que se
 vacían, listas que se tachan, tarjetas numeradas que vuelan a un riel de progreso, un **chat de WhatsApp que se
 contesta solo**, cadenas de pasos que se encienden, comparaciones con ✗ y ✓, sellos y el cierre "Sígueme".
 
 ![Piezas del estilo noche](docs/noche.jpg)
+
+El estilo recrear parte de **algo que pasó de verdad** (le pasas el enlace o el archivo del video viral): Claude
+saca los cuadros clave, entiende el gesto icónico y lo **vuelve a dibujar como animación plana** (nunca pega el video
+ajeno), y después explica el negocio con tarjetas de precio, contadores, pantallas "en vivo", cajas tachadas, la barra
+RAZONABLE ↔ COSTOSO, menús ANTES / DESPUÉS, burbujas de comentarios, título con sello y el botón "Sígueme".
+
+![Piezas del estilo recrear](docs/recrear.jpg)
 
 Claude hace todo esto solo:
 
@@ -70,7 +77,7 @@ Claude hace todo esto solo:
 
 ## Qué puedes pedirle
 
-- "Hazlo en estilo noche" (o "en estilo collage").
+- "Hazlo en estilo noche" (o "en estilo collage", o "en estilo recrear con este video: …").
 - "Cambia el rojo por el azul de mi marca."
 - "Ponle esta música" (deja tu canción en `recursos/musica/` dentro de la skill, o pásale la ruta).
 - "Cuando digo *mis resultados*, muestra estas fotos."
@@ -131,12 +138,15 @@ scripts/
   recortar.py            presentador con transparencia (Robust Video Matting)
   motor.py               el motor: cámara con 3 encuadres, piezas, subtítulos, audio
   hoja.py · foto.py      hoja de revisión con tiempos · preparar fotos
+  investigar.py          estilo recrear: cuadros clave del video viral (descarga, hoja, cortes, notas)
 plantilla/
   build_minimo.py        estilo collage: reel completo con 5 piezas, el punto de partida
   build.py               estilo collage: el reel de ejemplo completo, con todas las recetas
   minis.py · style.css   mini diseños para collages · estilos
   build_noche.py         estilo noche: reel completo de ejemplo (8 piezas)
   noche.py · noche.css   las piezas del estilo noche (pasos, contadores, WhatsApp, nodos, tachados…)
+  build_recrear.py       estilo recrear: el reel de Tesla completo (recreación + 17 escenas)
+  recrear.py · recrear.css  las piezas del estilo recrear (objetos y recorridos, tarjetas de precio, contador, barra, menús…)
 recursos/                fuentes, efectos de sonido, logos (y tu música)
 ```
 

@@ -3,11 +3,13 @@ name: reel-motion
 description: >-
   Convierte un video VERTICAL de una persona hablando a cámara en un reel de MOTION GRAPHICS hecho 100 % con
   código: RECORTA al presentador del fondo y lo monta sobre una tarjeta de color, con titulares palabra por
-  palabra, cifras, listas, subtítulos, música y efectos sincronizados con lo que dice (HyperFrames + GSAP). Dos
-  estilos: "collage" (por defecto: fondo claro, papel rasgado, polaroids, mascota) y "noche" (fondo tinta con
-  grilla, pasos numerados, contadores, chats de WhatsApp, nodos, tachados). Úsala cuando pidan "anima este
-  video", "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "edítalo con
-  reel-motion estilo collage / estilo noche", "estilo animador", o invoquen /reel-motion. NO es para dejar el
+  palabra, cifras, listas, subtítulos, música y efectos sincronizados con lo que dice (HyperFrames + GSAP). Tres
+  estilos: "collage" (por defecto: fondo claro, papel rasgado, polaroids, mascota), "noche" (fondo tinta con
+  grilla, pasos numerados, contadores, chats de WhatsApp, nodos, tachados) y "recrear" (un hecho viral o noticia
+  RECREADO como animación plana + análisis de negocio tipo informe: tarjetas de precio, contadores, menús
+  antes/después, modo plano azul). Úsala cuando pidan "anima este video", "edítalo con animaciones / motion
+  graphics", "ponme recortado sobre un fondo de color", "edítalo con reel-motion estilo collage / noche /
+  recrear", "recrea lo que pasó con X", "estilo animador", o invoquen /reel-motion. NO es para dejar el
   video real a pantalla completa con zooms y b-roll (eso es video-ad-editing), NI para un video animado SIN
   presentador a partir de un guion (eso es anuncios-animados o video-explainer).
 ---
@@ -70,21 +72,23 @@ otra cosa (no instales librerías en el Python global).
 5. **Fotos propias**, solo si el guion las menciona ("mis fotos", "mis resultados"): muéstrale opciones y que elija.
 
 No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú. El **estilo** tampoco se pregunta:
-usa el que pida ("estilo collage", "estilo noche") o elígelo con la tabla de §1b.
+usa el que pida ("estilo collage", "estilo noche", "estilo recrear") o elígelo con la tabla de §1b.
+Si pide **recrear**, pregunta además por el **video viral** (enlace o archivo) que hay que recrear, si no lo pasó.
 
-## 1b. Estilos: collage (por defecto) y noche
+## 1b. Estilos: collage (por defecto), noche y recrear
 
-| | **collage** (por defecto) | **noche** |
-|---|---|---|
-| Cómo lo piden | "anima este video", "edítalo con reel-motion" (sin decir estilo), "estilo collage" | "edítalo con reel-motion **estilo noche**", "fondo oscuro", "como el de los pasos / el de las 10 automatizaciones / el de chat vs agente" |
-| Cómo se ve | fondo claro, papel rasgado, fotos y polaroids, mascota, titulares escritos a mano, varios fondos de color | fondo TINTA con grano + grilla que deriva + viñeta y marcas de corte; tarjeta roja con el presentador; papel crema con grano y borde rasgado; UN acento |
-| Conviene para | historias, confesiones, demostraciones ("mira lo que hice"), fotos propias, cambios de estilo | pasos, listas ("N cosas que…"), procesos, comparaciones ("deja X, usa Y"), cifras y metas, chats/automatizaciones |
-| Plantilla | `plantilla/build_minimo.py` + recetas de `plantilla/build.py` (§5) | `plantilla/build_noche.py` + piezas de `plantilla/noche.py` (tabla de abajo) |
-| Encuadres | card · full · split | card ↔ split (no usa full) |
+| | **collage** (por defecto) | **noche** | **recrear** |
+|---|---|---|---|
+| Cómo lo piden | "anima este video", "edítalo con reel-motion" (sin decir estilo), "estilo collage" | "edítalo con reel-motion **estilo noche**", "fondo oscuro", "como el de los pasos / el de las 10 automatizaciones / el de chat vs agente" | "edítalo con reel-motion **estilo recrear**", "recrea lo que pasó con X", "como el del carro de Tesla", "estilo informe" |
+| Cómo se ve | fondo claro, papel rasgado, fotos y polaroids, mascota, titulares escritos a mano, varios fondos de color | fondo TINTA con grano + grilla que deriva + viñeta y marcas de corte; tarjeta roja con el presentador; papel crema con grano y borde rasgado; UN acento | INFORME: fondo claro con cuadrícula + encabezado tipo reporte; el presentador CHICO abajo a la derecha; arriba un ESCENARIO donde el hecho viral se RECREA en dibujo plano y luego entran las piezas de negocio; modo CLARO ↔ PLANO AZUL |
+| Conviene para | historias, confesiones, demostraciones ("mira lo que hice"), fotos propias, cambios de estilo | pasos, listas ("N cosas que…"), procesos, comparaciones ("deja X, usa Y"), cifras y metas, chats/automatizaciones | un hecho real que fue tendencia + la lectura de negocio detrás ("mira lo que hizo X marca", "por qué esto se volvió viral", "la estrategia detrás de…"), casos de estudio con precios y cifras |
+| Plantilla | `plantilla/build_minimo.py` + recetas de `plantilla/build.py` (§5) | `plantilla/build_noche.py` + piezas de `plantilla/noche.py` (tabla de abajo) | `plantilla/build_recrear.py` + piezas de `plantilla/recrear.py` (§1c) |
+| Encuadres | card · full · split | card ↔ split (no usa full) | uno solo (presentador en la esquina) + dos modos de color |
 
 Si no dice estilo: **collage**, salvo que el guion sea claramente de pasos, lista numerada, proceso o comparación:
 ahí usa **noche** y avísalo en una línea ("lo armé en estilo noche porque es una lista de pasos; si lo prefieres
-collage, lo cambio"). Los dos estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos.
+collage, lo cambio"). Si el guion CUENTA ALGO QUE PASÓ (una marca, un lanzamiento, un video viral) y luego lo
+analiza, propón **recrear**. Los tres estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos.
 
 ### Cómo se arma un reel estilo noche
 
@@ -155,6 +159,81 @@ con `N.entra()` / `N.golpe()`. Estilos propios en `css_extra=` de `N.cerrar()`; 
     que se deja, check = lo nuevo); las transiciones siguen el orden del discurso. Un reel técnicamente pulido pero
     con piezas genéricas pierde contra uno que va explicando cada frase. Ejemplo completo: `plantilla/ejemplo_evolucion.py`.
 
+## 1c. Estilo recrear: un hecho viral recreado + el informe de negocio
+
+Nace del reel "El carro volador de Tesla no está a la venta" (oct 2026): el gancho lo pone la REALIDAD (todos vieron
+el carro subir la rampa y salir volando) y el presentador pone la lectura de negocio. La animación no inventa nada:
+**recrea lo que pasó, en dibujo plano y limpio**, mientras él lo explica; por eso se siente serio y no un meme más.
+
+**Qué necesita además del crudo:** el video viral (enlace o archivo). Nunca se pega ese video en el reel: se recrea
+(cero problema de derechos; se ve como análisis, no como repost). Funciona mejor con **objetos y escenas** (carros,
+cohetes, productos, pantallas, tiendas, cifras). Una persona famosa se dibuja como silueta o figura simple, nunca una
+cara reconocible; las marcas van como TEXTO ("TESLA"), no con su logo.
+
+### Flujo extra (antes del plan de escenas)
+
+```bash
+PY "SKILL/scripts/investigar.py" "<video_viral_o_enlace>" "<P>"     # deja P/_work/viral/{viral.mp4, hoja.jpg, cortes.jpg, notas.md}
+```
+
+Descarga el video si es un enlace (yt-dlp), saca una hoja de contacto con el segundo de cada cuadro y los cuadros donde
+la imagen cambia de golpe. **Mira `hoja.jpg` y `cortes.jpg`** y llena `notas.md`: el hecho en 3-5 pasos ("rueda → sube
+la rampa → da media vuelta → sale volando"), el **gesto icónico** (el momento que todos recuerdan: es lo que se recrea
+en la escena 1), qué objetos hay que dibujar y con qué recorrido, y los datos del caso (precios, versiones, cifras).
+Si no hay video (solo una noticia), investiga en la web qué pasó y llena las mismas notas. Recién ahí escribe el plan.
+
+### Cómo se arma
+
+Copia `SKILL/plantilla/build_recrear.py` a `P/build.py` (es el reel real de Tesla, 61 s, 17 escenas) y cambia el bloque
+ESCENAS. Lo que cambia frente a los otros estilos:
+
+- Encabezado: agrega `SKILL/plantilla` al `sys.path` e importa `import recrear as R`; `ft = R.ft` (= `f() - 0.03`).
+- `R.escenario(informe='INFORME', tema='SEÑUELO', caso='CASO · EL LLAMATIVO', usuario='@…')` en vez de `escenario('card')`.
+  Pone la cuadrícula, el encabezado y al presentador chico abajo a la derecha (se ajusta solo a la cara); los
+  subtítulos van a su izquierda (`R.subtitulos(...)`). `R.cerrar(musica=…)` en vez de `cerrar()`.
+- **Escena 1 = la recreación** (lo único que se dibuja a mano en cada reel): un objeto SVG (`R.objeto(idp, svg)` o el
+  carro de ejemplo `R.carro(idp)`) + su recorrido (`R.recorrido(sel, t, tramos)` con `R.media_vuelta()` / `R.curva()`
+  para las curvas) + el trazo punteado del camino (`R.trazo`) + `R.flota` / `R.propulsores` / `R.entra_rodando` /
+  `R.aparece`. Copia el gesto tal cual pasó en el video viral (notas.md), no lo "mejores".
+- `R.plano(t)` cuando el guion pasa de "qué pasó" a "por qué funciona" ("vamos a analizarlo") y `R.claro(t)` cuando
+  vuelve a lo concreto. Un solo tween repinta TODAS las piezas (variables CSS): no dupliques nada.
+- El escenario útil es x 60-1020 · y 330-1170. La esquina x 470-1080 · y 1170-1920 es del presentador: nada ahí.
+- Colores: `motor.iniciar(colores={'acento', 'tinta', 'fondo'})` alimenta el modo claro; el plano azul está en `R.PLANO`.
+
+| Pieza | Firma | Úsala para |
+|---|---|---|
+| recreación | `R.objeto(idp, svg, acento=False)` · `R.carro(idp, acento, propulsores)` · `R.recorrido(sel, t, [(dur, x, y, rot)…])` · `R.media_vuelta(cx, cy, r, dur)` · `R.curva(x0, y0, x1, y1, dur, arco, rot0, rot1)` · `R.trazo(idp, d, piso, t0, t1)` · `R.piso(idp, y, t0, t1)` · `R.flota(sel, t0, t1, base, amp)` · `R.propulsores(idp, t0, t1)` · `R.entra_rodando(sel, t, y)` · `R.aparece(sel, t, x, y)` | el hecho viral en dibujo: un objeto que rueda, sube, vuela, cae, se abre… |
+| `etiqueta` | `R.etiqueta(idp, texto, t, x, y, oscuro=False, t1=None, golpe=False)` | rótulo rojo/negro pegado a algo ("NO ESTÁ A LA VENTA", "MÁS VENDIDO") |
+| `pildora` | `R.pildora(idp, texto, t, y=372, t1=None)` | título de sección centrado ("FUNCIÓN 1 · ATRAER LA ATENCIÓN") |
+| `nota` | `R.nota(idp, texto, t, y, x=None, t1=None)` | dato celeste de apoyo ("EL REFERENTE VUELA") |
+| `tarjeta_precio` | `R.tarjeta_precio(idp, top, nombre, sub, precio, t, t_precio, chips=[(texto, t, color)], icono=html, acento, t1)` | versiones / planes / productos con precio (3 caben: top 372 · 560 · 748); chips '' am ve ce |
+| `contador` | `R.contador(idp, top, rotulo, (desde, hasta, sufijo) o [valores], t, t_ini, t_fin, t1)` | cifra que cuenta ("VISTAS 0 → 1.000.000+") |
+| `pantallas` | `R.pantallas(idp, t, celdas=[(cifra, html)], top=632, cols=3, etiqueta='EN VIVO', t1)` → `[(t, id)]` | cuadrícula que se enciende una por una (transmisiones, tiendas, cuentas) |
+| `tachar` | `R.tachar(idp, texto, t, (t_x1, t_x2), y, t1)` | caja mono tachada con dos trazos ("PUBLICIDAD $$$") |
+| `barra` | `R.barra(idp, y, valor, t, t_desliza, t_ok, izq='RAZONABLE', der='COSTOSO', objeto_html, t1)` | percepción: un precio que se desliza de COSTOSO a RAZONABLE + check |
+| `menu` | `m = R.menu(idp, left, titulo, [(nombre, sub, precio)], t, hueco=True, t_items, entra)` · `m.llena(nombre, sub, precio, t, chip=(texto, t, color, arriba))` · `m.resalta(i, t, 'g'/'y')` · `m.chip(i, texto, t)` · `m.sale(t)` · `R.cambia_menus(salen, entran, t)` | ANTES / DESPUÉS de una lista de precios: el hueco se llena con la opción extrema; lo de siempre se resalta |
+| `burbuja` | `R.burbuja(idp, texto, t, x, y, t1, rot)` | lo que la gente comenta ("¿Esto por solicitud?") |
+| `titulo` · `sello` · `boton` | `R.titulo(idp, [l1, l2], t, sub, y=560)` · `R.sello(idp, texto, t, y=398)` · `R.boton(idp, texto, t, y=1030)` | cierre: nombre de la estrategia + sello de goma + "SÍGUEME PARA MÁS →" |
+| movimientos | `R.pin · slam · up · desde · out · outo · pulso · vibra · keyframes · cv` | para piezas propias (todas con fromTo, repetibles) |
+
+Para una pieza nueva: HTML con `R.add()` (queda dentro de `#rz`, posición absoluta), colores SOLO con las variables
+(`var(--cb)` tarjeta, `var(--cl)` borde, `var(--tx)` texto, `var(--mu)` secundario, `var(--pr)` acento) para que el modo
+plano la repinte; clases que empiecen por `r`; estilos propios en `css_extra=` de `R.cerrar()`.
+
+### La vara del estilo recrear
+
+1. **Cada frase = una mini-demostración que TRADUCE lo que se dice**, no decoración: "no está a la venta" → el carro
+   sale volando + etiqueta; "millones lo vieron" → contador + pantallas; "parece razonable" → la barra. Una pieza
+   grande por momento; entra con su palabra (`ft('palabra')`) y sale antes de la siguiente (`t1`).
+2. **La recreación es fiel**: mira los cuadros del viral y copia el gesto (dirección, orden, qué se mueve).
+3. **Nada de huecos**: si el guion sigue hablando del hecho, el objeto se queda flotando (`R.flota`) hasta la
+   siguiente pieza; si queda un tramo sin pieza, alarga la anterior.
+4. **Dos modos con sentido**: claro para lo concreto (qué pasó, el negocio pequeño), plano azul para el análisis.
+   Uno o dos cambios por reel, no más.
+5. **Un acento + verde** solo para "lo razonable / la decisión correcta"; el resto en tinta y gris.
+6. **Cifras reales del caso** (precios, versiones, vistas); si se inventa un ejemplo (la pastelería), que sea creíble.
+7. **El presentador no se tapa**: todo vive en el escenario de arriba; subtítulos a su izquierda.
+
 ## 2. Flujo de trabajo
 
 Todos los comandos se corren tal cual; los pasos 2.1 y 2.3 tardan (minutos): córrelos en segundo plano y avisa.
@@ -209,7 +288,7 @@ debe verse completo sobre rojo, sin pedazos del fondo ni huecos. Si se cuelan ob
 ### 2.4 Plan de escenas (antes de escribir código)
 
 Parte el guion en **escenas de 2 a 6 segundos, una idea por escena**, y escribe la tabla en `P/_work/plan.md`
-(arriba, el estilo elegido —collage o noche— y por qué):
+(arriba, el estilo elegido —collage, noche o recrear— y por qué; en recrear, primero `investigar.py` y `notas.md`, §1c):
 
 | # | Frase (palabras exactas de words.json) | Encuadre | Pieza | Qué se ve y cuándo entra cada cosa |
 |---|---|---|---|---|
@@ -228,6 +307,8 @@ Copia una plantilla a `P/build.py`:
   recetas). Copia de ahí las recetas que necesites (§5); no lo uses entero para otro guion.
 - `SKILL/plantilla/build_noche.py` → **estilo noche**: reel completo de 35 s (card ↔ papel, 8 piezas de
   `plantilla/noche.py`). Cambias el bloque ESCENAS con las piezas de la tabla de §1b.
+- `SKILL/plantilla/build_recrear.py` → **estilo recrear**: el reel de Tesla completo (61 s, 17 escenas, recreación +
+  piezas de `plantilla/recrear.py`). Cambias la escena 1 (la recreación del hecho) y el resto con la tabla de §1c.
 
 ```bash
 cd "<P>"                   # los comandos de build, lint, snapshot y render se corren DENTRO de la carpeta del proyecto
@@ -256,6 +337,7 @@ su último elemento, abre `snaps/contact-sheet*.jpg` (una hoja por cada 9 cuadro
 - [ ] Los subtítulos no chocan con ninguna pieza.
 - [ ] Ortografía y tildes; nombres propios bien escritos (`correcciones=`).
 - [ ] Estilo noche: la vara de §1b (zona llena, texto ≥ 40 px, una pieza grande por momento, un solo acento).
+- [ ] Estilo recrear: la vara de §1c (cada frase traduce, recreación fiel, sin huecos, nada en la esquina del presentador).
 
 Corrige y repite hasta que pase. No muestres nada sin haber mirado tú las capturas.
 
@@ -323,7 +405,8 @@ La interfaz de Instagram/TikTok tapa arriba (0-250), abajo (1650-1920) y la colu
 ## 4. El motor (`SKILL/scripts/motor.py`)
 
 Encabezado fijo de todo `build.py` (el orden importa: `iniciar()` va ANTES del `from motor import *`; el estilo
-noche además agrega `SKILL/plantilla` al `sys.path` e importa `noche as N`: ver `plantilla/build_noche.py`):
+noche además agrega `SKILL/plantilla` al `sys.path` e importa `noche as N`: ver `plantilla/build_noche.py`; el estilo
+recrear hace lo mismo con `recrear as R`: ver `plantilla/build_recrear.py`):
 
 ```python
 import sys, os

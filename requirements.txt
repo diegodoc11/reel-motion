@@ -3,3 +3,4 @@ pillow
 opencv-contrib-python-headless>=4.9,<5
 onnxruntime-directml; sys_platform == "win32"
 onnxruntime; sys_platform != "win32"
+yt-dlp

@@ -1,0 +1,103 @@
+/* =====================================================================================================
+   reel-motion · ESTILO RECREAR  (lo agrega recrear.cerrar() después de style.css)
+   Look de "informe": fondo claro con cuadrícula, encabezado tipo reporte, rótulos mono en mayúsculas, un acento.
+   Todo el color sale de variables CSS en #root (las pone recrear.py) para que el modo PLANO AZUL repinte las
+   piezas con un solo tween:  --pg fondo · --gl cuadrícula · --cb tarjeta · --cl borde · --tx texto · --mu texto
+   secundario · --pr acento (rojo en claro, cian en plano) · --cf relleno del objeto · --ck trazo del objeto ·
+   --pb/--pt píldora fondo/texto · --ok verde · --sh sombra.   @AC@ = acento FIJO (color de marca, no cambia).
+   ===================================================================================================== */
+#root{background:var(--pg)}
+#rgrid{background-image:linear-gradient(var(--gl) 2px,transparent 2px),linear-gradient(90deg,var(--gl) 2px,transparent 2px);background-size:90px 90px;background-position:45px 45px}
+#rvigL{background:radial-gradient(ellipse 60% 45% at 50% 46%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
+#rvigB{background:radial-gradient(ellipse 60% 45% at 50% 46%,rgba(120,190,255,.22),rgba(0,0,0,0) 70%)}
+#rz{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:20;color:var(--tx)}
+#rz>*{position:absolute}
+.rgrp>*{position:absolute}
+.rmono{font-family:"JBM";font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.rhd{top:268px;left:70px;width:940px;display:flex;justify-content:space-between;font-size:26px;color:var(--mu)}
+.rhd b{color:var(--tx);font-weight:700}
+.ruser{top:1222px;left:70px;font-size:24px;color:var(--mu)}
+/* etiqueta (roja / oscura) · píldora · nota celeste */
+.rtag{padding:8px 18px 10px;border-radius:8px;background:var(--pr);color:#fff;font-size:28px;letter-spacing:.12em;box-shadow:0 6px 14px rgba(0,0,0,.2)}
+.rtag.osc{background:var(--pb);color:var(--pt)}
+.rpill{left:50%;padding:12px 30px 14px;border-radius:40px;background:var(--pb);color:var(--pt);font-size:30px;white-space:nowrap}
+.rnota{background:#DDF3FF;color:#145A86;border:2px solid #7CC6EE;padding:8px 18px 10px;border-radius:8px;font-size:26px}
+/* objeto dibujado (SVG de trazo + relleno) · el carro de ejemplo · propulsores */
+.robj{width:0;height:0}
+.robj svg{position:absolute;overflow:visible}
+.robj .body{fill:var(--cf);stroke:var(--ck);stroke-width:4;stroke-linejoin:round}
+.robj .glass{fill:#CFE4F2;stroke:var(--ck);stroke-width:3}
+.robj .wh{fill:#1F1F1F;stroke:var(--ck);stroke-width:3}.robj .rim{fill:#C9C9C9}
+.robj.ac .body{fill:@AC@}.robj.ac .glass{fill:#F7C9C8}
+.rcar svg{left:-130px;top:-52px;width:260px;height:104px}
+.rthr{position:absolute;top:34px;width:34px;height:150px;transform-origin:50% 0;border-radius:0 0 40px 40px;
+  background:linear-gradient(180deg,rgba(94,196,255,.95),rgba(120,210,255,.55) 45%,rgba(140,220,255,0));filter:blur(1px)}
+.rthr.a{left:-96px}.rthr.b{left:50px}
+/* trazo de recorrido (rampa, pista, ruta) */
+.rtrazo path{fill:none;stroke:var(--ck);stroke-width:5;stroke-dasharray:22 16;stroke-linecap:round}
+.rtrazo .piso{stroke-dasharray:none;stroke-width:4;opacity:.5}
+/* tarjetas de precio */
+.rpc{left:120px;width:840px;height:160px;border-radius:22px;background:var(--cb);border:3px solid var(--cl);box-shadow:0 14px 30px var(--sh);display:flex;align-items:center;padding:0 34px 0 30px;gap:26px}
+.rpc .ric{position:relative;flex:none;width:200px;height:90px}
+.rpc .ric .robj{position:absolute;left:100px;top:46px}
+.rpc .ric .rcar svg{left:-100px;top:-42px;width:200px;height:80px}
+.rpc .ric .rthr{display:none}
+.rpc .rn{flex:1;min-width:0}
+.rpc .rn b{display:block;font-family:"IT";font-weight:900;font-size:42px;letter-spacing:-.03em;line-height:1}
+.rpc .rn small{display:block;margin-top:8px;font-family:"JBM";font-weight:600;font-size:20px;letter-spacing:.12em;color:var(--mu)}
+.rpc .rp{text-align:right;flex:none}
+.rpc .rp b{display:block;font-family:"IT";font-weight:900;font-size:54px;letter-spacing:-.04em;line-height:1;color:var(--pr)}
+.rpc .rp .rchips{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.rchip{font-family:"JBM";font-weight:700;font-size:18px;letter-spacing:.08em;padding:4px 10px 5px;border-radius:6px;background:var(--pb);color:var(--pt);white-space:nowrap}
+.rchip.am{background:#FFE6A3;color:#6A4A00}.rchip.ve{background:#D4F3DF;color:#0E5A2E}.rchip.ce{background:#DDF3FF;color:#145A86}
+/* contador + pantallas "en vivo" */
+.rcnt{left:120px;width:840px;height:150px;border-radius:22px;background:var(--cb);border:3px solid var(--cl);display:flex;align-items:center;justify-content:space-between;padding:0 40px;box-shadow:0 14px 30px var(--sh)}
+.rcnt small{font-family:"JBM";font-weight:600;font-size:28px;letter-spacing:.14em;color:var(--mu)}
+.rcnt b{position:relative;width:560px;height:92px;font-family:"IT";font-weight:900;font-size:92px;line-height:92px;letter-spacing:-.04em;color:var(--pr);font-variant-numeric:tabular-nums}
+.rcnt b .stp{left:auto;right:0}
+.rlive{width:256px;height:190px;border-radius:18px;background:var(--cb);border:3px solid var(--cl);overflow:hidden;box-shadow:0 10px 22px var(--sh)}
+.rlive .rin{position:absolute;left:0;top:0;width:256px;height:190px}
+.rlive .rin .robj{position:absolute;left:128px;top:112px}
+.rlive .rin .rcar svg{width:170px;height:68px;left:-85px;top:-34px}
+.rlive .rin .rthr{height:70px;width:20px;top:22px}.rlive .rin .rthr.a{left:-60px}.rlive .rin .rthr.b{left:34px}
+.rlive i{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:8px;font-family:"JBM";font-weight:700;font-size:20px;letter-spacing:.12em;color:#fff;background:var(--pr);padding:4px 12px 5px;border-radius:6px;font-style:normal}
+.rlive i:before{content:"";width:10px;height:10px;border-radius:50%;background:#fff}
+.rlive em{position:absolute;right:14px;top:14px;font-family:"JBM";font-weight:600;font-size:20px;color:var(--mu);font-style:normal}
+/* caja tachada */
+.rads{left:50%;padding:18px 40px 20px;border-radius:16px;background:var(--cb);border:3px solid var(--cl);font-family:"JBM";font-weight:700;font-size:40px;letter-spacing:.1em;color:var(--tx);white-space:nowrap}
+.rads svg{position:absolute;left:-6%;top:-14%;width:112%;height:128%}
+.rads svg path{fill:none;stroke:var(--pr);stroke-width:12;stroke-linecap:round}
+/* barra razonable – costoso */
+.rprice{left:50%;padding:10px 30px 14px;border-radius:14px;background:var(--cb);border:3px solid var(--cl);font-family:"IT";font-weight:900;font-size:60px;letter-spacing:-.03em;white-space:nowrap;box-shadow:0 10px 22px var(--sh)}
+.rprice .rok{position:absolute;right:-74px;top:14px;width:62px;height:62px;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center}
+.rprice .rok svg{width:38px;height:38px}
+.rbar{left:110px;width:860px;height:44px;border-radius:22px;background:linear-gradient(90deg,#2DBE70 0 40%,@AC@ 60% 100%);border:3px solid var(--cl);box-shadow:0 10px 22px var(--sh)}
+.rbar:after{content:"";position:absolute;left:0;right:0;top:50%;height:0;border-top:3px dashed rgba(255,255,255,.75)}
+.rbl{font-family:"JBM";font-weight:700;font-size:28px;letter-spacing:.14em}
+.rbl.v{color:#1F9A5C}.rbl.r{color:var(--pr)}
+.rpole{width:0;border-left:4px solid var(--cl);height:52px}
+/* menús ANTES / DESPUÉS */
+.rmenu{width:430px;border-radius:22px;background:var(--cb);border:3px solid var(--cl);padding:18px 16px 16px;box-shadow:0 14px 30px var(--sh)}
+.rmenu>h4{font-family:"JBM";font-weight:700;font-size:28px;letter-spacing:.3em;text-align:center;color:var(--tx);padding-bottom:14px;border-bottom:2px solid var(--cl);margin:0 0 14px}
+.rslot{position:relative;height:150px;border-radius:14px;border:3px dashed #BDBDB8;margin-bottom:12px}
+.rit{position:relative;height:150px;border-radius:14px;border:3px solid var(--cl);margin-bottom:12px;padding:16px 18px;background:var(--cb)}
+.rit:last-child,.rslot:last-child{margin-bottom:0}
+.rit b,.rslot b{display:block;position:relative;font-family:"IT";font-weight:900;font-size:36px;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.rit small,.rslot small{display:block;position:relative;margin-top:6px;font-family:"JBM";font-weight:600;font-size:18px;letter-spacing:.12em;color:var(--mu);white-space:nowrap}
+.rit em,.rslot em{position:absolute;left:18px;bottom:14px;font-style:normal;font-family:"IT";font-weight:900;font-size:46px;letter-spacing:-.04em;line-height:1}
+.rslot .rin{position:absolute;inset:0;padding:16px 18px}
+.rslot .rchip,.rit .rchip{position:absolute;right:12px;bottom:14px}
+.rit .rchip.big{font-size:16px;letter-spacing:.04em}
+.rchip.arriba{bottom:auto !important;top:12px}
+.rfx{position:absolute;inset:-3px;border-radius:14px;pointer-events:none}
+.rfx.g{background:#DFF5E7;border:3px solid #1F9A5C}.rfx.y{background:#FFF3C9;border:3px solid #E0B23A}
+.rbub{padding:12px 24px 14px;border-radius:30px;background:var(--cb);border:3px solid var(--cl);font-family:"IT";font-weight:800;font-size:34px;letter-spacing:-.02em;white-space:nowrap;box-shadow:0 10px 22px var(--sh)}
+.rbub:after{content:"";position:absolute;left:38px;top:-16px;width:22px;height:22px;background:var(--cb);border-left:3px solid var(--cl);border-top:3px solid var(--cl);transform:rotate(45deg)}
+/* cierre */
+.rttl{left:0;width:1080px;text-align:center;font-family:"IT";font-weight:900;font-size:124px;letter-spacing:-.05em;line-height:.95;color:var(--tx)}
+.rttl small{display:block;margin-top:26px;font-family:"JBM";font-weight:600;font-size:26px;letter-spacing:.2em;color:var(--mu)}
+.rstamp{left:50%;padding:10px 34px 14px;border:8px solid var(--pr);border-radius:16px;color:var(--pr);font-family:"IT";font-weight:900;font-size:110px;letter-spacing:-.02em;line-height:1;text-transform:uppercase;background:rgba(255,255,255,.55)}
+.rbtn{left:50%;padding:22px 48px 26px;border-radius:20px;background:var(--pb);color:var(--pt);font-family:"IT";font-weight:900;font-size:56px;letter-spacing:-.03em;white-space:nowrap;box-shadow:0 14px 30px var(--sh)}
+.rbtn .rcur{position:absolute;right:-42px;bottom:-46px;width:70px;height:70px}
+/* subtítulos: a la izquierda del presentador (que va abajo a la derecha) */
+.cap{left:0;width:@CAPW@px;font-size:56px}
