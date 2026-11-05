@@ -75,6 +75,19 @@ Claude hace todo esto solo:
 5. **Revisa su propio trabajo** antes de mostrártelo: que nada te tape la cara y que todo el texto quepa.
 6. Te entrega un **borrador**. Pides cambios. Cuando apruebas, **exporta el final** en 1080×1920 a 60 cuadros.
 
+## Video 100 % animado (sin grabarte)
+
+¿No quieres salir en cámara? Pídele un video animado sobre un tema:
+
+```
+Con reel-motion, hazme un video animado de 30 segundos para explicarle a un dueño de negocio por qué
+debe usar agentes de IA. Estilo recrear, en negro, naranja y blanco.
+```
+
+Claude escribe el guion (te lo muestra antes), genera la voz en off con **ElevenLabs** y lo anima en estilo recrear,
+con subtítulos y música. Necesitas una llave de ElevenLabs (el plan gratis alcanza para probar): Claude te dice dónde
+pegarla, nunca en el chat.
+
 ## Qué puedes pedirle
 
 - "Hazlo en estilo noche" (o "en estilo collage", o "en estilo recrear con este video: …").
@@ -93,7 +106,8 @@ Claude hace todo esto solo:
 | ~4 GB de disco | modelos de transcripción y de recorte | gratis |
 | Tarjeta gráfica (opcional) | que el recorte tarde minutos y no horas | — |
 
-No pide llaves ni cuentas de terceros: la transcripción, el recorte y el render corren en tu computador.
+No pide llaves ni cuentas de terceros: la transcripción, el recorte y el render corren en tu computador. Solo el modo
+**sin presentador** usa ElevenLabs para la voz en off (o tu propia voz grabada, sin llave).
 
 Probada en Windows 11 con tarjeta NVIDIA. En Mac y Linux está preparada para funcionar (usa CoreML o el
 procesador), pero ahí se ha probado menos: si algo falla, abre un *issue* con el error.

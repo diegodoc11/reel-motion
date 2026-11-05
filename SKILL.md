@@ -9,9 +9,10 @@ description: >-
   RECREADO como animación plana + análisis de negocio tipo informe: tarjetas de precio, contadores, menús
   antes/después, modo plano azul). Úsala cuando pidan "anima este video", "edítalo con animaciones / motion
   graphics", "ponme recortado sobre un fondo de color", "edítalo con reel-motion estilo collage / noche /
-  recrear", "recrea lo que pasó con X", "estilo animador", o invoquen /reel-motion. NO es para dejar el
-  video real a pantalla completa con zooms y b-roll (eso es video-ad-editing), NI para un video animado SIN
-  presentador a partir de un guion (eso es anuncios-animados o video-explainer).
+  recrear", "recrea lo que pasó con X", "estilo animador", o invoquen /reel-motion. También hace videos 100 %
+  animados SIN grabarse ("hazme un video animado sobre X"): escribe el guion, genera la voz en off con ElevenLabs y
+  anima en estilo recrear (modo sin presentador, §1d). NO es para dejar el video real a pantalla completa con
+  zooms y b-roll (eso es video-ad-editing).
 ---
 
 # reel-motion — el presentador recortado dentro de un diseño animado
@@ -27,7 +28,7 @@ que se dice la palabra.
 |---|---|---|
 | **reel-motion** (esta) | Grabado y **recortado** dentro de un diseño | "anímalo", "motion graphics", "recortado sobre color" |
 | video-ad-editing | Grabado, **a pantalla completa** con su fondo real | "edítame este video": zooms, b-roll, subtítulos, badges |
-| anuncios-animados / video-explainer | **No hay** presentador grabado | parten de un guion o un tema: voz IA + ilustraciones |
+| anuncios-animados / video-explainer | **No hay** presentador grabado | parten de un guion o un tema: voz IA + ilustraciones (para motion graphics sin presentador, usa el modo §1d de esta skill) |
 | hyperframes (oficial) | — | el motor que renderiza; dudas de bajo nivel de composición o CLI |
 
 **Entrada que necesita:** un video vertical (9:16) de UNA persona hablando a cámara, cara de frente. Sirve grabado
@@ -233,6 +234,33 @@ plano la repinte; clases que empiecen por `r`; estilos propios en `css_extra=` d
 5. **Un acento + verde** solo para "lo razonable / la decisión correcta"; el resto en tinta y gris.
 6. **Cifras reales del caso** (precios, versiones, vistas); si se inventa un ejemplo (la pastelería), que sea creíble.
 7. **El presentador no se tapa**: todo vive en el escenario de arriba; subtítulos a su izquierda.
+
+## 1d. Sin presentador: video 100 % animado con voz en off
+
+Cuando piden "hazme un video animado sobre X" (o "sin grabarme") y NO hay video de una persona:
+
+1. **Guion**: 20-60 s, frases cortas, una idea por frase. Escribe las cifras como deben verse en pantalla (25, 2.000):
+   la voz las lee bien y los subtítulos salen con números. Guárdalo en `P/guion.txt` y **muéstraselo al usuario antes de
+   gastar créditos de voz**. Si dio colores, tema, duración o un ejemplo de estilo, respétalos.
+2. **Voz y proyecto**:
+   ```bash
+   PY "SKILL/scripts/sin_presentador.py" "<P>" --texto "<P>/guion.txt" --velocidad 1.1      # voz con ElevenLabs
+   PY "SKILL/scripts/sin_presentador.py" "<P>" --audio "mi_voz.mp3"                         # o la voz grabada del usuario
+   ```
+   La llave de ElevenLabs va en `~/.config/reel-motion/.env` (`ELEVENLABS_API_KEY=sk_...`) o en la variable de entorno
+   del mismo nombre. Si no la tiene: que cree una en elevenlabs.io → Settings → API Keys (permiso Text to Speech) y la
+   pegue ÉL en ese archivo; **nunca en el chat**. `--voz <id>` usa cualquier voz de su biblioteca (por defecto una voz
+   prediseñada que habla español). Deja `words.json`, `cutmap.json`, `cut.mp4` negro, `cutout.webm` vacío y la voz: no
+   hay nada que recortar ni equivocaciones que buscar.
+3. **Build**: copia `SKILL/plantilla/build_sin_presentador.py` a `P/build.py` (estilo recrear en paleta oscura, 14 s de
+   ejemplo con su guion). Lo propio de este modo, ya puesto en la plantilla: `I('#cam', opacity=0)` (no hay persona),
+   `R.escenario(..., cap_ancho=1080)` + `R.CAP_Y = 1470` (subtítulos centrados abajo), `I('#rvigL', opacity=0.07)` en
+   fondos oscuros, la paleta con `R.CLARO.update(...)` / `R.PLANO.update(...)` y el gancho visible desde el cuadro 0
+   (`I(..., opacity=1)`: es la portada). Todo el escenario es tuyo (x 60-1020 · y 330-1380): no hay esquina que esquivar.
+4. **Escenas**: la vara del estilo recrear (§1c) aplica igual: cada frase con una pieza que la traduzca (tarjeta de
+   precio, contador, sello, tachado, personas, una tienda o un robot dibujados en SVG si el tema lo pide) y un cambio a
+   modo plano cuando el guion pasa a explicar. Desde ahí, el flujo de siempre: lint, capturas, borrador,
+   `verificar_reel.py` y final (§2.6-2.8).
 
 ## 2. Flujo de trabajo
 
