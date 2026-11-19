@@ -45,13 +45,13 @@ Graba tu video, ábrelo en Claude Code y dile:
 Anima este video con reel-motion: C:\Videos\mi-video.mp4
 ```
 
-## Tres estilos
+## Cuatro estilos
 
-| | **collage** (por defecto) | **noche** | **recrear** |
-|---|---|---|---|
-| Pídelo así | "Anima este video con reel-motion" o "…estilo collage" | "Edítalo con reel-motion **estilo noche**" | "Edítalo con reel-motion **estilo recrear**" + el video viral |
-| Se ve | Fondo claro, papel rasgado, fotos y polaroids, mascota, titulares a mano | Fondo tinta con grilla que se mueve, tarjeta roja, papel crema con borde rasgado, un solo color de acento | Un informe: cuadrícula, encabezado tipo reporte, tú chico en la esquina y arriba un escenario donde el hecho viral se **recrea en dibujo**; pasa a plano azul cuando analizas |
-| Ideal para | Historias, confesiones, demostraciones, "mira lo que hice" | Pasos, listas ("10 cosas que…"), procesos, comparaciones, cifras, chats de WhatsApp | "Mira lo que hizo esta marca", noticias virales, casos de estudio con precios y cifras |
+| | **collage** (por defecto) | **noche** | **recrear** | **pizarra** |
+|---|---|---|---|---|
+| Pídelo así | "Anima este video con reel-motion" o "…estilo collage" | "Edítalo con reel-motion **estilo noche**" | "Edítalo con reel-motion **estilo recrear**" + el video viral | "Edítalo con reel-motion **estilo pizarra**" |
+| Se ve | Fondo claro, papel rasgado, fotos y polaroids, mascota, titulares a mano | Fondo tinta con grilla que se mueve, tarjeta roja, papel crema con borde rasgado, un solo color de acento | Un informe: cuadrícula, encabezado tipo reporte, tú chico en la esquina y arriba un escenario donde el hecho viral se **recrea en dibujo**; pasa a plano azul cuando analizas | Una pizarra negra con cuadrícula, tú chico en la esquina; cada frase se explica con **monigotes que actúan y dibujos que se trazan solos**, la palabra clave gigante en rojo y el subtítulo que se enciende palabra por palabra |
+| Ideal para | Historias, confesiones, demostraciones, "mira lo que hice" | Pasos, listas ("10 cosas que…"), procesos, comparaciones, cifras, chats de WhatsApp | "Mira lo que hizo esta marca", noticias virales, casos de estudio con precios y cifras | Explicar una idea o una tendencia, opiniones con datos, estudios, "esto tiene nombre…" |
 
 El estilo noche trae piezas listas: pestañas de **PASO 1 de 5**, cifras que cuentan ($0 → $5.000), baterías que se
 vacían, listas que se tachan, tarjetas numeradas que vuelan a un riel de progreso, un **chat de WhatsApp que se
@@ -65,6 +65,14 @@ ajeno), y después explica el negocio con tarjetas de precio, contadores, pantal
 RAZONABLE ↔ COSTOSO, menús ANTES / DESPUÉS, burbujas de comentarios, título con sello y el botón "Sígueme".
 
 ![Piezas del estilo recrear](docs/recrear.jpg)
+
+El estilo pizarra es el que más explica: no necesita fotos ni pasos numerados. Si dices "en 1865 un economista…",
+aparece el monigote del economista; si dices "más rápido", la gráfica sube; si dices "es mentira", cae un sello.
+Trae monigotes con poses y caras (camina, salta, piensa, se sorprende), más de 50 dibujos listos (robots, tiendas,
+gráficas, relojes, laptops, carros…), órdenes que se escriben palabra por palabra, listas con check y el cierre
+"Comenta PALABRA" con la caja de comentarios de Instagram.
+
+![Piezas del estilo pizarra](docs/pizarra.jpg)
 
 Claude hace todo esto solo:
 
@@ -90,7 +98,7 @@ pegarla, nunca en el chat.
 
 ## Qué puedes pedirle
 
-- "Hazlo en estilo noche" (o "en estilo collage", o "en estilo recrear con este video: …").
+- "Hazlo en estilo noche" (o "en estilo collage", "en estilo pizarra", o "en estilo recrear con este video: …").
 - "Cambia el rojo por el azul de mi marca."
 - "Ponle esta música" (deja tu canción en `recursos/musica/` dentro de la skill, o pásale la ruta).
 - "Cuando digo *mis resultados*, muestra estas fotos."
@@ -161,6 +169,8 @@ plantilla/
   noche.py · noche.css   las piezas del estilo noche (pasos, contadores, WhatsApp, nodos, tachados…)
   build_recrear.py       estilo recrear: el reel de Tesla completo (recreación + 17 escenas)
   recrear.py · recrear.css  las piezas del estilo recrear (objetos y recorridos, tarjetas de precio, contador, barra, menús…)
+  build_pizarra.py       estilo pizarra: reel completo de ejemplo (77 s, 15 escenas)
+  pizarra.py · dibujos.py   las piezas del estilo pizarra (subtítulo fantasma, monigotes, dibujos a línea, cierre) y 50+ dibujos
 recursos/                fuentes, efectos de sonido, logos (y tu música)
 ```
 

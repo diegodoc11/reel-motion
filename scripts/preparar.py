@@ -3,6 +3,11 @@
 reel-motion · PREPARAR  — del video crudo al proyecto listo para animar.
 
     python preparar.py <video> <carpeta_proyecto> [--idioma es] [--modelo large-v3] [--sin-silencios]
+                       [--min-sil 0.40] [--aire 0.12] [--zoom 1.0]
+
+  --min-sil S   las pausas de S segundos o más se cortan (por defecto 0.40; ritmo apretado: 0.20)
+  --aire S      aire que se deja a cada lado de la pausa cortada (por defecto 0.12; con --min-sil 0.20 usa 0.06)
+  --zoom Z      mini zoom anclado arriba al centro (p. ej. 1.075 saca del cuadro la marca "RECORDED ON BIGVU" de abajo)
 
 Hace, en orden:
   1. copia el crudo como source.mp4 y saca el audio
@@ -116,6 +121,9 @@ def main():
         raise SystemExit(__doc__)
     video, P = os.path.abspath(sys.argv[1]), os.path.abspath(sys.argv[2])
     idioma = arg('--idioma', 'es'); modelo = arg('--modelo', 'large-v3')
+    global MIN_SIL, KEEP
+    MIN_SIL = float(arg('--min-sil', MIN_SIL)); KEEP = float(arg('--aire', min(KEEP, round(MIN_SIL * 0.3, 3))))
+    zoom = float(arg('--zoom', 1.0))
     WK = os.path.join(P, '_work')
     for d in (WK, os.path.join(P, 'assets'), os.path.join(P, 'renders')): os.makedirs(d, exist_ok=True)
     for tool in ('ffmpeg', 'ffprobe'):
@@ -139,7 +147,11 @@ def main():
     if hdr:   # los iPhone graban en HDR: Chrome no lo puede componer -> se pasa a SDR conservando el color (mobius)
         vf.append('zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=mobius:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p')
     if (w0, h0) != (1080, 1920): vf.append('scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920')
-    print(f'video: {w0}x{h0}{" · HDR -> SDR" if hdr else ""}{" · se ajusta a 1080x1920" if (w0, h0) != (1080, 1920) else ""}')
+    if zoom > 1.0:   # mini zoom anclado arriba al centro: lo de abajo (marcas de agua) sale del cuadro
+        zw, zh = int(1080 * zoom) // 2 * 2, int(1920 * zoom) // 2 * 2
+        vf.append(f'scale={zw}:{zh}:flags=lanczos,crop=1080:1920:{(zw - 1080) // 2}:0')
+    print(f'video: {w0}x{h0}{" · HDR -> SDR" if hdr else ""}{" · se ajusta a 1080x1920" if (w0, h0) != (1080, 1920) else ""}'
+          f'{f" · zoom {zoom}" if zoom > 1.0 else ""} · se cortan pausas de {MIN_SIL:.2f} s o más (aire {KEEP:.2f} s)')
 
     # ---------- 1) audio + palabras del crudo ----------
     a16 = os.path.join(WK, 'a16.wav')

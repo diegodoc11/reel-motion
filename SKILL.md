@@ -3,13 +3,16 @@ name: reel-motion
 description: >-
   Convierte un video VERTICAL de una persona hablando a cámara en un reel de MOTION GRAPHICS hecho 100 % con
   código: RECORTA al presentador del fondo y lo monta sobre una tarjeta de color, con titulares palabra por
-  palabra, cifras, listas, subtítulos, música y efectos sincronizados con lo que dice (HyperFrames + GSAP). Tres
+  palabra, cifras, listas, subtítulos, música y efectos sincronizados con lo que dice (HyperFrames + GSAP). Cuatro
   estilos: "collage" (por defecto: fondo claro, papel rasgado, polaroids, mascota), "noche" (fondo tinta con
-  grilla, pasos numerados, contadores, chats de WhatsApp, nodos, tachados) y "recrear" (un hecho viral o noticia
+  grilla, pasos numerados, contadores, chats de WhatsApp, nodos, tachados), "recrear" (un hecho viral o noticia
   RECREADO como animación plana + análisis de negocio tipo informe: tarjetas de precio, contadores, menús
-  antes/después, modo plano azul). Úsala cuando pidan "anima este video", "edítalo con animaciones / motion
-  graphics", "ponme recortado sobre un fondo de color", "edítalo con reel-motion estilo collage / noche /
-  recrear", "recrea lo que pasó con X", "estilo animador", o invoquen /reel-motion. También hace videos 100 %
+  antes/después, modo plano azul) y "pizarra" (pizarra negra con cuadrícula donde CADA FRASE se explica con
+  monigotes que actúan y dibujos a línea que se trazan solos, subtítulo fantasma que se enciende palabra por
+  palabra y la palabra clave gigante en rojo; el presentador chico abajo a la derecha). Úsala cuando pidan "anima
+  este video", "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "edítalo con
+  reel-motion estilo collage / noche / recrear / pizarra", "explícalo con dibujos / monigotes", "recrea lo que pasó
+  con X", "estilo animador", o invoquen /reel-motion. También hace videos 100 %
   animados SIN grabarse ("hazme un video animado sobre X"): escribe el guion, genera la voz en off con ElevenLabs y
   anima en estilo recrear (modo sin presentador, §1d). NO es para dejar el video real a pantalla completa con
   zooms y b-roll (eso es video-ad-editing).
@@ -73,23 +76,24 @@ otra cosa (no instales librerías en el Python global).
 5. **Fotos propias**, solo si el guion las menciona ("mis fotos", "mis resultados"): muéstrale opciones y que elija.
 
 No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú. El **estilo** tampoco se pregunta:
-usa el que pida ("estilo collage", "estilo noche", "estilo recrear") o elígelo con la tabla de §1b.
+usa el que pida ("estilo collage", "estilo noche", "estilo recrear", "estilo pizarra") o elígelo con la tabla de §1b.
 Si pide **recrear**, pregunta además por el **video viral** (enlace o archivo) que hay que recrear, si no lo pasó.
 
-## 1b. Estilos: collage (por defecto), noche y recrear
+## 1b. Estilos: collage (por defecto), noche, recrear y pizarra
 
-| | **collage** (por defecto) | **noche** | **recrear** |
-|---|---|---|---|
-| Cómo lo piden | "anima este video", "edítalo con reel-motion" (sin decir estilo), "estilo collage" | "edítalo con reel-motion **estilo noche**", "fondo oscuro", "como el de los pasos / el de las 10 automatizaciones / el de chat vs agente" | "edítalo con reel-motion **estilo recrear**", "recrea lo que pasó con X", "como el del carro de Tesla", "estilo informe" |
-| Cómo se ve | fondo claro, papel rasgado, fotos y polaroids, mascota, titulares escritos a mano, varios fondos de color | fondo TINTA con grano + grilla que deriva + viñeta y marcas de corte; tarjeta roja con el presentador; papel crema con grano y borde rasgado; UN acento | INFORME: fondo claro con cuadrícula + encabezado tipo reporte; el presentador CHICO abajo a la derecha; arriba un ESCENARIO donde el hecho viral se RECREA en dibujo plano y luego entran las piezas de negocio; modo CLARO ↔ PLANO AZUL |
-| Conviene para | historias, confesiones, demostraciones ("mira lo que hice"), fotos propias, cambios de estilo | pasos, listas ("N cosas que…"), procesos, comparaciones ("deja X, usa Y"), cifras y metas, chats/automatizaciones | un hecho real que fue tendencia + la lectura de negocio detrás ("mira lo que hizo X marca", "por qué esto se volvió viral", "la estrategia detrás de…"), casos de estudio con precios y cifras |
-| Plantilla | `plantilla/build_minimo.py` + recetas de `plantilla/build.py` (§5) | `plantilla/build_noche.py` + piezas de `plantilla/noche.py` (tabla de abajo) | `plantilla/build_recrear.py` + piezas de `plantilla/recrear.py` (§1c) |
-| Encuadres | card · full · split | card ↔ split (no usa full) | uno solo (presentador en la esquina) + dos modos de color |
+| | **collage** (por defecto) | **noche** | **recrear** | **pizarra** |
+|---|---|---|---|---|
+| Cómo lo piden | "anima este video", "edítalo con reel-motion" (sin decir estilo), "estilo collage" | "edítalo con reel-motion **estilo noche**", "fondo oscuro", "como el de los pasos / el de las 10 automatizaciones / el de chat vs agente" | "edítalo con reel-motion **estilo recrear**", "recrea lo que pasó con X", "como el del carro de Tesla", "estilo informe" | "edítalo con reel-motion **estilo pizarra**", "explícalo con dibujos / monigotes", "fondo negro con cuadrícula", "como el del caballo al carro" |
+| Cómo se ve | fondo claro, papel rasgado, fotos y polaroids, mascota, titulares escritos a mano, varios fondos de color | fondo TINTA con grano + grilla que deriva + viñeta y marcas de corte; tarjeta roja con el presentador; papel crema con grano y borde rasgado; UN acento | INFORME: fondo claro con cuadrícula + encabezado tipo reporte; el presentador CHICO abajo a la derecha; arriba un ESCENARIO donde el hecho viral se RECREA en dibujo plano y luego entran las piezas de negocio; modo CLARO ↔ PLANO AZUL | PIZARRA NEGRA con cuadrícula fina y polvo; el presentador CHICO abajo a la derecha; subtítulo FANTASMA (la frase en gris, cada palabra se enciende al decirla); la palabra clave GIGANTE en rojo; MONIGOTES que actúan y DIBUJOS a línea que se trazan solos; cierre con la caja de comentarios de Instagram |
+| Conviene para | historias, confesiones, demostraciones ("mira lo que hice"), fotos propias, cambios de estilo | pasos, listas ("N cosas que…"), procesos, comparaciones ("deja X, usa Y"), cifras y metas, chats/automatizaciones | un hecho real que fue tendencia + la lectura de negocio detrás ("mira lo que hizo X marca", "por qué esto se volvió viral", "la estrategia detrás de…"), casos de estudio con precios y cifras | explicar una idea o un razonamiento sin fotos: por qué pasa algo, una tendencia, una opinión con datos, un estudio, una historia con moraleja, "esto tiene nombre…" |
+| Plantilla | `plantilla/build_minimo.py` + recetas de `plantilla/build.py` (§5) | `plantilla/build_noche.py` + piezas de `plantilla/noche.py` (tabla de abajo) | `plantilla/build_recrear.py` + piezas de `plantilla/recrear.py` (§1c) | `plantilla/build_pizarra.py` + piezas de `plantilla/pizarra.py` y dibujos de `plantilla/dibujos.py` (§1e) |
+| Encuadres | card · full · split | card ↔ split (no usa full) | uno solo (presentador en la esquina) + dos modos de color | uno solo (presentador en la esquina) |
 
 Si no dice estilo: **collage**, salvo que el guion sea claramente de pasos, lista numerada, proceso o comparación:
 ahí usa **noche** y avísalo en una línea ("lo armé en estilo noche porque es una lista de pasos; si lo prefieres
 collage, lo cambio"). Si el guion CUENTA ALGO QUE PASÓ (una marca, un lanzamiento, un video viral) y luego lo
-analiza, propón **recrear**. Los tres estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos.
+analiza, propón **recrear**. Si EXPLICA una idea frase por frase y no hay fotos ni pasos numerados, propón
+**pizarra**. Los cuatro estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos de base.
 
 ### Cómo se arma un reel estilo noche
 
@@ -262,6 +266,64 @@ Cuando piden "hazme un video animado sobre X" (o "sin grabarme") y NO hay video 
    modo plano cuando el guion pasa a explicar. Desde ahí, el flujo de siempre: lint, capturas, borrador,
    `verificar_reel.py` y final (§2.6-2.8).
 
+## 1e. Estilo pizarra: cada frase explicada con monigotes y dibujos
+
+Nace de los reels "13 años del caballo al carro" y "Con la IA íbamos a trabajar menos" (nov 2026): el presentador
+CHICO abajo a la derecha (como en recrear) y, arriba, una pizarra negra donde **cada frase se ve**: si dice "en 1865 un
+economista", aparece el monigote del economista; si dice "más rápido", la locomotora echa humo; si dice "es
+mentira", cae un sello. Es el estilo que más explica: no necesita fotos ni pasos numerados, solo un guion que razone.
+
+### Cómo se arma
+
+Copia `SKILL/plantilla/build_pizarra.py` a `P/build.py` (es el reel real de 77 s, 15 escenas) y cambia el bloque ESCENAS.
+
+- Encabezado: `import recrear as R`, `import pizarra as Z`, `import dibujos as D` (después de `from motor import *`);
+  `ft = R.ft`. `Z.escenario(firma='TU NOMBRE')` en vez de `escenario()` y `Z.cerrar(musica=…)` al final.
+- Zonas: las piezas van en **x 60-1020 · y 300-1170**. El subtítulo fantasma va en x 54 · y 1232 (ancho 570), a la
+  izquierda de la cabeza (y≈1258 · x≈826). La esquina del presentador (x 470-1080 · y 1170-1920) no se toca.
+- La primera pieza se ve desde el cuadro 0 (`I('#id', opacity=1)`): es la portada en Instagram.
+- `dib()` (definida en la plantilla) dibuja cualquier función de `dibujos.py` en su sitio, con su escala.
+
+| Pieza | Firma | Úsala para |
+|---|---|---|
+| `escenario` | `Z.escenario(firma='', cabeza_y=1258, cabeza_x=826, alto_cabeza=262)` | pizarra negra con cuadrícula, polvo y foco + presentador recortado en la esquina |
+| `karaoke` | `Z.karaoke(desde=0, hasta=None, rojas=('palabra',…), reemplazos={'ia': 'IA'})` | el subtítulo fantasma: la frase en gris y cada palabra se enciende (las de `rojas`, en rojo) |
+| `grande` | `Z.grande(idp, 'MENTIRA', t, t1=None, y=380, fs=150)` | LA palabra clave gigante en rojo con resplandor y golpe |
+| `frase` | `Z.frase(idp, texto, t, t1=None, x=540, y=330, fs=44, cursiva=False)` | frase corta en blanco, o en cursiva fina ("cuando tú no estás") |
+| `rotulo` | `Z.rotulo(idp, texto, t, x, y, t1=None, fs=30, fondo=None)` | etiqueta chica pegada a un dibujo ("8 MESES", "AGENTES IA"); `fondo=ROJO` = píldora |
+| `dibujo` | `Z.dibujo(idp, svg, x, y, w, h, t, t1=None, dur=0.7, centro=False)` + `Z.L(path)` línea · `Z.F(path)` relleno · `Z.C(cx, cy, r)` | cualquier dibujo a línea que se TRAZA solo (gráficas, flechas, objetos) |
+| `tachar` / `check` | `Z.tachar(idp, x, y, w, h, t, t1=None)` · `Z.check(idp, x, y, t, t1=None, tam=90)` | equis roja sobre lo que no / check verde sobre lo que sí |
+| `mono` | `Z.mono(idp, x, y, alto=320, pose='parado', cara='feliz', t=0, t1=None)` | monigote con los pies en (x, y). Poses: parado, brazos, jarras, piensa, triste, duda, camina_a, camina_b, salta, sentado, celular · caras: feliz, serio, triste, sorpresa, enojado, guino |
+| movimiento | `Z.pose_a(idp, t, 'salta')` · `Z.cara(idp, t, 'sorpresa')` · `Z.caminar(idp, t0, t1, dx)` · `Z.rebote(idp, t, alto=40, veces=1)` | el monigote ACTÚA la frase: cambia de pose y de cara, camina, salta |
+| `escrito` | `Z.escrito(idp, desde, hasta, t_entra, t1, titulo='TÚ LE DICES', rojas=())` | una orden o cita LITERAL que se escribe palabra por palabra al decirla (prompts, titulares, mensajes) |
+| `lista` | `Z.lista(idp, [(texto, t_entra, t_check)], x, y, t1, fs=40, paso=76)` | lista con casillas dibujadas a mano que se marcan con check |
+| `cta_comentario` | `Z.cta_comentario('PALABRA', t, t_palabra, t_burbuja, texto_burbuja='Te escribo por DM 📩')` | cierre: COMENTA + caja de comentarios de Instagram con la palabra letra a letra + burbuja azul |
+| `cerrar` | `Z.cerrar(musica, volumen_musica=0.24, inicio_musica=0, css_extra='', subir_al_final=2.3)` | mezcla y escribe index.html; la música sube al terminar la voz y llega al último cuadro |
+
+**Dibujos listos** (`D.<nombre>()` devuelve `(svg, w, h)`; se dibujan con `dib(idp, D.robot, x, y, t, t1)`): caballo, carro,
+celular, grafica, reloj_arena, abuelo, globo (de diálogo), teclado, casete, walkman, tienda, grieta, robot, trofeo, papeles,
+calendario, flecha, flecha_abajo, chat, pregunta, lupa, diana, sobre, carrito, camara, megafono, laptop (`apagada=True`),
+nube, corazon, avion, ojo, documento, telefono, engrane, etiqueta_precio, plastilina, escudo, enlace, humano, rayo, reloj
+(`hora=`), maquina_vapor, humo, carbon, mancuerna, cartel, revista, edificio, plato, mesa, puerta. Para uno nuevo, copia
+uno parecido en `dibujos.py`: trazos `Z.L(...)` de 6 px, blancos, y el rojo solo para el acento.
+
+### La vara del estilo pizarra
+
+1. **Cada frase tiene su pieza**, y entra CON su palabra (`ft`). Revisa la hoja cuadro por cuadro cada 1 s (`hoja.py
+   … 1.0`): un hueco de 1-3 s con la pizarra vacía (sobre todo al empezar una escena) se nota; llénalo antes de mostrar.
+2. **Que se vea lo que dice, al pie de la letra**: las órdenes y citas se escriben con `escrito`; las cifras van grandes;
+   lo que se descarta se tacha; el monigote cambia de pose o de cara cuando cambia la emoción de la frase.
+3. **Una escena a la vez**: lo anterior sale (`t1`) antes de que entre lo siguiente; nada encima del presentador.
+4. **Ninguna pieza sale antes de terminar de entrar** (las de `pizarra.py` ya lo cuidan). Si `npx hyperframes lint`
+   avisa `overlapping_gsap_tweens` en **opacity**, esa pieza se va a quedar pegada en pantalla: corrige los tiempos. Los
+   avisos en `rotation` o `y` (brazos y saltos del monigote) no hacen daño.
+5. **Ids propios con prefijo** (`e1`, `tm_lista`…): nunca `cam` (es el contenedor del presentador) ni clases que ya existen
+   en `style.css` (`.big .ttl .tb .tx .cl .tl .row .qc .ul .ph .in .tbar`).
+6. **Un solo acento**: rojo para la palabra clave y lo que importa; todo lo demás, blanco y gris.
+7. **Música hasta el último cuadro**: `Z.cerrar` ya la sube al terminar la voz. Después del render, vuelve a pegarle
+   `final_audio.wav` completo al MP4 (el render se come ~0.2 s de la cola del audio):
+   `ffmpeg -i renders/X.mp4 -i final_audio.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k renders/X_ok.mp4`.
+
 ## 2. Flujo de trabajo
 
 Todos los comandos se corren tal cual; los pasos 2.1 y 2.3 tardan (minutos): córrelos en segundo plano y avisa.
@@ -275,7 +337,12 @@ PY "SKILL/scripts/preparar.py" "<video>" "<P>"        # P = <carpeta de trabajo>
 Deja en `P`: `source.mp4`, `cut.mp4` (1080×1920, 30 fps, sin silencios largos; HDR de iPhone convertido a SDR),
 `words.json` (cada palabra con su segundo exacto), `face.json` (dónde está la cara), `cutmap.json`, `style.css`,
 `minis.py`, y al final imprime el **guion con tiempos**. Opciones: `--idioma en|pt|…` (por defecto `es`),
-`--modelo medium`, `--sin-silencios`. Tarda ~5-10 min por minuto de video.
+`--modelo medium`, `--sin-silencios`, `--min-sil 0.20` (ritmo apretado: corta toda pausa de 0.20 s o más; por defecto
+0.40), `--aire 0.06` (lo que se deja a cada lado de la pausa) y `--zoom 1.075` (mini zoom anclado arriba: saca del
+cuadro una marca de agua de abajo, como la de BIGVU). Tarda ~5-10 min por minuto de video.
+
+Al final dice cuántas **pausas largas quedaron**: si no es 0, whisper metió una palabra en un silencio y la pausa no se
+cortó. Ubícala (energía del audio) y córtala con `_work/cortes.json` (segundos del crudo) antes de recortar.
 
 Lee los avisos: si dice que la cara ocupa mucho cuadro, arma el reel solo con los encuadres `card` y `full`.
 El guion impreso sale SIN corregir: anota ya los nombres que whisper oyó mal ("Cloud" → "Claude") para `correcciones=`.
