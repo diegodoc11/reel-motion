@@ -17,6 +17,7 @@ REPOS = {
     'anidoodle': ('https://github.com/alexgreensh/anidoodle', os.path.join('engine', 'tools', 'render.mjs'), ('pizarra_animada', 'motion_design')),
     'claude-drawing': ('https://github.com/cloveric/claude-drawing-skill', os.path.join('lib', 'cartoon.py'), ('munecos',)),
     'handdraw-skill': ('https://github.com/ToBeWin/handdraw-skill', os.path.join('scripts', 'handdraw.mjs'), ('handdraw',)),
+    'claude-animation-base': ('https://github.com/JohnHeibel/ClaudeAnimationBase', os.path.join('src', 'clawd.js'), ('caritas',)),
 }
 # qué necesita cada estilo
 NECESITA = {
@@ -26,6 +27,7 @@ NECESITA = {
     'motion_design': ['node', 'anidoodle'],
     'munecos': ['claude-drawing'],
     'handdraw': ['node', 'handdraw-skill'],
+    'caritas': ['node', 'claude-animation-base'],
 }
 
 
@@ -54,6 +56,11 @@ def claude_drawing_lib():
 
 def handdraw():
     return raiz('handdraw-skill', 'handdraw')
+
+
+def clawd_kit():
+    """el kit ClaudeAnimationBase (Clawd en p5.brush) del estilo caritas."""
+    return raiz('claude-animation-base', 'caritas')
 
 
 def manim_python():

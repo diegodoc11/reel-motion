@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Instala (una sola vez por computador) los motores de los estilos con motor propio y verifica que funcionen.
 
-    python estilos/instalar.py fanzine            # o: graficas, pizarra_animada, motion_design, munecos, handdraw, todos
+    python estilos/instalar.py fanzine            # o: graficas, pizarra_animada, motion_design, munecos, handdraw, caritas, todos
     python estilos/instalar.py todos --verificar  # solo revisa, no instala nada
 
 Qué instala cada estilo (todo gratis, todo en tu computador):
@@ -11,6 +11,8 @@ Qué instala cada estilo (todo gratis, todo en tu computador):
   motion_design    el mismo motor AniDoodle
   munecos          motor claude-drawing (MIT): clon en reel-motion/motores/claude-drawing
   handdraw         motor handdraw-skill (MIT, Remotion): clon en reel-motion/motores/handdraw-skill + npm install
+  caritas          motor ClaudeAnimationBase (MIT, p5.js + p5.brush): clon en reel-motion/motores/claude-animation-base
+                   + npm install (pinta en Chrome; si no lo tienes, usa el Chromium de Playwright)
 Si ya tienes esas skills en ~/.claude/skills, se usan esas (no se clona nada).
 """
 import os
@@ -86,7 +88,7 @@ def repo(nombre):
         sh(['git', 'clone', '--depth', '1', url, os.path.join(M.MOTORES, nombre)])
         base = M.raiz(nombre)
     # dependencias de node del motor
-    nodo = {'anidoodle': os.path.join(base, 'engine'), 'handdraw-skill': base}.get(nombre)
+    nodo = {'anidoodle': os.path.join(base, 'engine'), 'handdraw-skill': base, 'claude-animation-base': base}.get(nombre)
     if nodo and not os.path.isdir(os.path.join(nodo, 'node_modules')):
         if falta(f'dependencias de {nombre}'): sh(['npm', 'install', '--no-audit', '--no-fund'], cwd=nodo)
     elif nodo: ok(f'dependencias de {nombre}')
@@ -105,7 +107,7 @@ def estilo(e):
         if n == 'comun': comun()
         elif n == 'manim': manim()
         else: repo(n)
-    if e in ('pizarra_animada', 'motion_design', 'handdraw'): comun()      # también ruedan con Chromium
+    if e in ('pizarra_animada', 'motion_design', 'handdraw', 'caritas'): comun()      # también ruedan con Chrome/Chromium
 
 
 if __name__ == '__main__':

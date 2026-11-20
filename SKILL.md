@@ -9,12 +9,12 @@ description: >-
   RECREADO como animación plana + análisis de negocio tipo informe: tarjetas de precio, contadores, menús
   antes/después, modo plano azul) y "pizarra" (pizarra negra con cuadrícula donde CADA FRASE se explica con
   monigotes que actúan y dibujos a línea que se trazan solos, subtítulo fantasma que se enciende palabra por
-  palabra y la palabra clave gigante en rojo; el presentador chico abajo a la derecha). Además, seis estilos con motor
+  palabra y la palabra clave gigante en rojo; el presentador chico abajo a la derecha). Además, siete estilos con motor
   propio en el mismo formato de presentador chico (§1f): "handdraw", "muñecos", "pizarra animada", "motion design",
-  "gráficas" y "fanzine". Úsala cuando pidan "anima
+  "gráficas", "fanzine" y "caritas" (Clawd pintado en acuarela actuando cada frase). Úsala cuando pidan "anima
   este video", "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "edítalo con
   reel-motion estilo collage / noche / recrear / pizarra / handdraw / muñecos / pizarra animada / motion design /
-  gráficas / fanzine", "explícalo con dibujos / monigotes", "recrea lo que pasó
+  gráficas / fanzine / caritas", "explícalo con dibujos / monigotes", "recrea lo que pasó
   con X", "estilo animador", o invoquen /reel-motion. También hace videos 100 %
   animados SIN grabarse ("hazme un video animado sobre X"): escribe el guion, genera la voz en off con ElevenLabs y
   anima en estilo recrear (modo sin presentador, §1d). NO es para dejar el video real a pantalla completa con
@@ -79,7 +79,7 @@ otra cosa (no instales librerías en el Python global).
 5. **Fotos propias**, solo si el guion las menciona ("mis fotos", "mis resultados"): muéstrale opciones y que elija.
 
 No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú. El **estilo** tampoco se pregunta:
-usa el que pida ("estilo collage", "estilo noche", "estilo recrear", "estilo pizarra" o uno de los seis de §1f) o elígelo
+usa el que pida ("estilo collage", "estilo noche", "estilo recrear", "estilo pizarra" o uno de los siete de §1f) o elígelo
 con la tabla de §1b.
 Si pide **recrear**, pregunta además por el **video viral** (enlace o archivo) que hay que recrear, si no lo pasó.
 
@@ -98,7 +98,7 @@ ahí usa **noche** y avísalo en una línea ("lo armé en estilo noche porque es
 collage, lo cambio"). Si el guion CUENTA ALGO QUE PASÓ (una marca, un lanzamiento, un video viral) y luego lo
 analiza, propón **recrear**. Si EXPLICA una idea frase por frase y no hay fotos ni pasos numerados, propón
 **pizarra**. Los cuatro estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos de base.
-Hay además **seis estilos con motor propio** (handdraw, muñecos, pizarra animada, motion design, gráficas, fanzine), con
+Hay además **siete estilos con motor propio** (handdraw, muñecos, pizarra animada, motion design, gráficas, fanzine, caritas), con
 el presentador chico como en pizarra: se usan cuando los piden por nombre (§1f).
 
 ### Cómo se arma un reel estilo noche
@@ -330,7 +330,7 @@ uno parecido en `dibujos.py`: trazos `Z.L(...)` de 6 px, blancos, y el rojo solo
    `final_audio.wav` completo al MP4 (el render se come ~0.2 s de la cola del audio):
    `ffmpeg -i renders/X.mp4 -i final_audio.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k renders/X_ok.mp4`.
 
-## 1f. Seis estilos con motor propio: handdraw, muñecos, pizarra animada, motion design, gráficas y fanzine
+## 1f. Siete estilos con motor propio: handdraw, muñecos, pizarra animada, motion design, gráficas, fanzine y caritas
 
 Mismo formato que pizarra (el presentador CHICO abajo a la derecha, el subtítulo fantasma que se enciende palabra por
 palabra con la palabra clave en rojo, cada cosa entra en el segundo de su palabra), pero la animación de fondo la dibuja
@@ -345,14 +345,15 @@ reel de 77 s (el ejemplo de cada plantilla).
 | **motion design** | "estilo motion design", "profesional", "corporativo" | fondo claro con manchas de color, títulos con barra, números que suben, íconos planos, insignias | números, datos, servicios, ventas | AniDoodle | ~5-6 min |
 | **gráficas** | "estilo gráficas", "con gráficas", "como 3Blue1Brown" | fondo oscuro con cuadrícula; títulos que se escriben, contadores, líneas de tiempo, curvas, medidores | demostrar un dato: crecimientos, porcentajes, tiempos | Manim | ~2 min (+4 la 1.ª vez) |
 | **fanzine** | "estilo fanzine", "impreso", "risografía" | impresión de 3 tintas (azul, rosa, amarillo) con grano; UNA maqueta larga que la cámara recorre; un camino abajo que une todo | recorridos: líneas de tiempo, procesos paso a paso | código propio (canvas) | ~1-2 min |
+| **caritas** | "estilo caritas", "con Clawd", "acuarela", "con un personaje que actúa" | caricatura pintada a pincel con acuarela: Clawd (el muñequito naranja de Claude) ACTÚA cada frase con sus 31 emociones (salta, corre, se duerme, celebra) entre objetos pintados; sin textos: solo cifras o UNA palabra clave gigante; líneas que hierven y brochazo entre tomas | historias con emoción, ejemplos con un personaje, tono tierno | ClaudeAnimationBase (p5.js + p5.brush) | ~9-12 min (el más lento) |
 
-**Nombres:** "pizarra animada" NO es "pizarra" (§1e, la negra con monigotes). Si el usuario no dice estilo, estos seis
+**Nombres:** "pizarra animada" NO es "pizarra" (§1e, la negra con monigotes). Si el usuario no dice estilo, estos siete
 no se eligen solos: se usan cuando los pide por nombre (o pide "otro look" y se los ofreces con esta tabla).
 
 ### Instalar (una vez por computador, solo el estilo que se vaya a usar)
 
 ```bash
-PY "SKILL/estilos/instalar.py" fanzine          # o: handdraw, munecos, pizarra_animada, motion_design, graficas, todos
+PY "SKILL/estilos/instalar.py" fanzine          # o: handdraw, munecos, pizarra_animada, motion_design, graficas, caritas, todos
 PY "SKILL/estilos/instalar.py" todos --verificar
 ```
 
@@ -360,7 +361,7 @@ Clona el motor que haga falta en `SKILL/motores/` (si ya está la skill en `~/.c
 `npm install`, crea el entorno de Manim en `SKILL/motores/manim/.venv` y deja Playwright listo. Necesita Node 18+ y git.
 Los motores son de terceros (MIT / Apache-2.0) y NO viajan dentro de esta skill.
 
-### Cómo se arma (igual en los seis)
+### Cómo se arma (igual en los siete)
 
 1. **Preparar, equivocaciones y recorte** como siempre (§2.1-2.3): el estilo usa `words.json`, `voice.wav`, `face.json`,
    `cutmap.json`, `silueta.json` y `cutout.webm` del proyecto.
@@ -374,13 +375,16 @@ Los motores son de terceros (MIT / Apache-2.0) y NO viajan dentro de esta skill.
    | motion design | `estilos/motion_design/build_motion_design.py` + `plantilla_escenas.ts` → `escenas_motion_design.ts` | TypeScript (kit `movimiento.ts`, mismas funciones que archivo.ts) |
    | gráficas | `estilos/graficas/build_graficas.py` + `plantilla_escenas.py` → `escenas_graficas.py` | Python de Manim (kit `kit.py`: `g.en`, `g.limpiar`, `texto`, `figura`…) |
    | fanzine | `estilos/fanzine/build_fanzine.py` + `plantilla_escenas.js` → `escenas_fanzine.js` | JavaScript (motor `motor.js`: `estacion`, `titulo`, `icono`, `gente`, `flecha`…) |
+   | caritas | `estilos/caritas/build_caritas.py` + `plantilla_escenas.js` → `escenas_caritas.js` | JavaScript con p5.brush: Clawd del motor (`clawd(x, piso, u, {...emotions(t, [[t0, 'happy'], [tp('frase'), 'proud']]), hat, aL, aR, walk})`, vistas, sombreros; lee el `ANIMATION_GUIDE.md` del motor) + objetos de `props.js`/`props2.js` (`escenario`, `transicion`, `numero`, `caballo`, `carro`, `reloj`, `celular`, `laptop`, `tienda`, `engrane`, `calendario`…) |
 
 3. `PY build_<estilo>.py --guion` → el guion con el segundo de cada frase. En el build se cambian `CORRECCIONES`,
    `ROJAS` (palabras rojas del subtítulo), las **TOMAS** (`ESC`: dónde empieza cada cuadro, con `ft('frase')`) y los
    **GOLPES** (pops). Las escenas usan los mismos nombres de toma (`ESC.B`) y `tp('frase')` / `ft('frase')` para el
    segundo de cada palabra (`tp('Desde', ESC.E)` busca a partir de la toma E: así no agarra un "desde" anterior).
 4. **Revisar antes de rodar** (rápido): fanzine/pizarra animada/motion design `--fotos 3s,12.5s` · gráficas `--previa`
-   (360×640) · muñecos `--revisar` (hoja con el final de cada toma) · handdraw `--solo-json` (lee los avisos).
+   (360×640) · muñecos `--revisar` (hoja con el final de cada toma) · handdraw `--solo-json` (lee los avisos) · caritas
+   `--fotos` (una foto por toma, ~30 s) o `--fotos 3s,12.5s`; para ver una toma moviéndose, abre
+   `P/_work/caritas/studio.html` en Chrome.
 5. `PY build_<estilo>.py` rueda el fondo (`<estilo>_raw.mp4`, sin audio) y monta: voz + música (`musica='auto'`) +
    efectos + subtítulo + presentador → `renders/<proyecto>-<estilo>-borrador.mp4` (ya en calidad final), `-VISTA.mp4`
    (celular) y `hojas/` (una foto por segundo). `--componer` vuelve a montar sin volver a rodar.
@@ -395,7 +399,15 @@ Los motores son de terceros (MIT / Apache-2.0) y NO viajan dentro de esta skill.
 3. **Zonas:** el dibujo va en y 160-1150; el subtítulo en y ≥ 1230 a la izquierda; la esquina del presentador no se toca.
 4. **Una lista de escenas sirve para varios estilos:** pizarra animada ↔ motion design usan las mismas funciones (se
    cambia el kit); gráficas y fanzine comparten la manera de armar (tomas + piezas con su segundo).
-5. **Un estilo pesado a la vez** (AniDoodle, handdraw): dos renders juntos ahogan el computador.
+5. **Un estilo pesado a la vez** (AniDoodle, handdraw, caritas): dos renders juntos ahogan el computador.
+6. **Caritas:** sin textos (solo cifras o UNA palabra clave con `numero()`; lo demás lo dice el subtítulo). Clawd grande
+   (u 30-38; con u 20-25 se ve chico) y la acción en y 180-1150. Una palabra clave que entra cerca del final de su toma
+   queda tapada por el brochazo: déjale ≥ 1 s de lectura. Brochazos en tonos claros (los oscuros tapan el subtítulo). Si
+   un personaje entra justo antes del cambio de toma y la siguiente lo muestra en grande, corte directo (sin brochazo).
+   Es el más lento (~100 cuadros por minuto con 4 Chrome): **un reel a la vez** (con dos a la vez un computador se
+   apagó); si se corta, `--seguir` retoma lo pintado. Si un Chrome pierde la tarjeta de video ("CONTEXT_LOST_WEBGL"),
+   sus cuadros salen negros: el build revisa cada cuadro y los vuelve a pintar solo. Clawd es la mascota de Claude: para una marca propia, pide cambiar
+   el personaje (el `ANIMATION_GUIDE.md` del motor explica cómo).
 
 ## 2. Flujo de trabajo
 
