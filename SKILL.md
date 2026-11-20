@@ -9,9 +9,12 @@ description: >-
   RECREADO como animación plana + análisis de negocio tipo informe: tarjetas de precio, contadores, menús
   antes/después, modo plano azul) y "pizarra" (pizarra negra con cuadrícula donde CADA FRASE se explica con
   monigotes que actúan y dibujos a línea que se trazan solos, subtítulo fantasma que se enciende palabra por
-  palabra y la palabra clave gigante en rojo; el presentador chico abajo a la derecha). Úsala cuando pidan "anima
+  palabra y la palabra clave gigante en rojo; el presentador chico abajo a la derecha). Además, seis estilos con motor
+  propio en el mismo formato de presentador chico (§1f): "handdraw", "muñecos", "pizarra animada", "motion design",
+  "gráficas" y "fanzine". Úsala cuando pidan "anima
   este video", "edítalo con animaciones / motion graphics", "ponme recortado sobre un fondo de color", "edítalo con
-  reel-motion estilo collage / noche / recrear / pizarra", "explícalo con dibujos / monigotes", "recrea lo que pasó
+  reel-motion estilo collage / noche / recrear / pizarra / handdraw / muñecos / pizarra animada / motion design /
+  gráficas / fanzine", "explícalo con dibujos / monigotes", "recrea lo que pasó
   con X", "estilo animador", o invoquen /reel-motion. También hace videos 100 %
   animados SIN grabarse ("hazme un video animado sobre X"): escribe el guion, genera la voz en off con ElevenLabs y
   anima en estilo recrear (modo sin presentador, §1d). NO es para dejar el video real a pantalla completa con
@@ -76,7 +79,8 @@ otra cosa (no instales librerías en el Python global).
 5. **Fotos propias**, solo si el guion las menciona ("mis fotos", "mis resultados"): muéstrale opciones y que elija.
 
 No preguntes nada técnico. Encuadres, piezas, tiempos y fuentes los decides tú. El **estilo** tampoco se pregunta:
-usa el que pida ("estilo collage", "estilo noche", "estilo recrear", "estilo pizarra") o elígelo con la tabla de §1b.
+usa el que pida ("estilo collage", "estilo noche", "estilo recrear", "estilo pizarra" o uno de los seis de §1f) o elígelo
+con la tabla de §1b.
 Si pide **recrear**, pregunta además por el **video viral** (enlace o archivo) que hay que recrear, si no lo pasó.
 
 ## 1b. Estilos: collage (por defecto), noche, recrear y pizarra
@@ -94,6 +98,8 @@ ahí usa **noche** y avísalo en una línea ("lo armé en estilo noche porque es
 collage, lo cambio"). Si el guion CUENTA ALGO QUE PASÓ (una marca, un lanzamiento, un video viral) y luego lo
 analiza, propón **recrear**. Si EXPLICA una idea frase por frase y no hay fotos ni pasos numerados, propón
 **pizarra**. Los cuatro estilos usan el mismo flujo (§2), el mismo motor y los mismos subtítulos de base.
+Hay además **seis estilos con motor propio** (handdraw, muñecos, pizarra animada, motion design, gráficas, fanzine), con
+el presentador chico como en pizarra: se usan cuando los piden por nombre (§1f).
 
 ### Cómo se arma un reel estilo noche
 
@@ -323,6 +329,73 @@ uno parecido en `dibujos.py`: trazos `Z.L(...)` de 6 px, blancos, y el rojo solo
 7. **Música hasta el último cuadro**: `Z.cerrar` ya la sube al terminar la voz. Después del render, vuelve a pegarle
    `final_audio.wav` completo al MP4 (el render se come ~0.2 s de la cola del audio):
    `ffmpeg -i renders/X.mp4 -i final_audio.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 256k renders/X_ok.mp4`.
+
+## 1f. Seis estilos con motor propio: handdraw, muñecos, pizarra animada, motion design, gráficas y fanzine
+
+Mismo formato que pizarra (el presentador CHICO abajo a la derecha, el subtítulo fantasma que se enciende palabra por
+palabra con la palabra clave en rojo, cada cosa entra en el segundo de su palabra), pero la animación de fondo la dibuja
+OTRO motor en vez de HyperFrames. Todo corre en el computador (0 USD). Salieron de una prueba de 9 estilos sobre el mismo
+reel de 77 s (el ejemplo de cada plantilla).
+
+| Estilo | Cómo lo piden | Cómo se ve | Conviene para | Motor | Rodar 77 s |
+|---|---|---|---|---|---|
+| **handdraw** | "estilo handdraw", "pizarra blanca", "dibujado a mano limpio" | papel crema; íconos de línea de colores que se trazan solos (sin mano), textos que se escriben letra por letra | datos y procesos, limpio | handdraw-skill (Remotion) | ~2-3 min |
+| **muñecos** | "estilo muñecos", "caricatura", "dibujo animado" | hoja de dibujo animado: boceto azul → tinta → color plano; objetos y gente con carita; líneas que "hierven" | historias, ejemplos con personajes, tono simpático | claude-drawing (Python) | ~3-5 min |
+| **pizarra animada** | "estilo pizarra animada", "álbum", "documental" | álbum de archivo: grabados en tarjetas con cinta, letras recortadas, máquina de escribir, bolígrafo rojo, sellos | fechas, historia, comparaciones, "antes y ahora" | AniDoodle | ~6-7 min |
+| **motion design** | "estilo motion design", "profesional", "corporativo" | fondo claro con manchas de color, títulos con barra, números que suben, íconos planos, insignias | números, datos, servicios, ventas | AniDoodle | ~5-6 min |
+| **gráficas** | "estilo gráficas", "con gráficas", "como 3Blue1Brown" | fondo oscuro con cuadrícula; títulos que se escriben, contadores, líneas de tiempo, curvas, medidores | demostrar un dato: crecimientos, porcentajes, tiempos | Manim | ~2 min (+4 la 1.ª vez) |
+| **fanzine** | "estilo fanzine", "impreso", "risografía" | impresión de 3 tintas (azul, rosa, amarillo) con grano; UNA maqueta larga que la cámara recorre; un camino abajo que une todo | recorridos: líneas de tiempo, procesos paso a paso | código propio (canvas) | ~1-2 min |
+
+**Nombres:** "pizarra animada" NO es "pizarra" (§1e, la negra con monigotes). Si el usuario no dice estilo, estos seis
+no se eligen solos: se usan cuando los pide por nombre (o pide "otro look" y se los ofreces con esta tabla).
+
+### Instalar (una vez por computador, solo el estilo que se vaya a usar)
+
+```bash
+PY "SKILL/estilos/instalar.py" fanzine          # o: handdraw, munecos, pizarra_animada, motion_design, graficas, todos
+PY "SKILL/estilos/instalar.py" todos --verificar
+```
+
+Clona el motor que haga falta en `SKILL/motores/` (si ya está la skill en `~/.claude/skills/<motor>`, usa esa), corre
+`npm install`, crea el entorno de Manim en `SKILL/motores/manim/.venv` y deja Playwright listo. Necesita Node 18+ y git.
+Los motores son de terceros (MIT / Apache-2.0) y NO viajan dentro de esta skill.
+
+### Cómo se arma (igual en los seis)
+
+1. **Preparar, equivocaciones y recorte** como siempre (§2.1-2.3): el estilo usa `words.json`, `voice.wav`, `face.json`,
+   `cutmap.json`, `silueta.json` y `cutout.webm` del proyecto.
+2. **Copiar la plantilla** del estilo a `P` (puede haber varios estilos en el mismo proyecto: los archivos no chocan):
+
+   | Estilo | Copiar a P | Las escenas van en |
+   |---|---|---|
+   | handdraw | `estilos/handdraw/build_handdraw.py` | el mismo build (Python: `r.escena`, `r.dib`, `r.txt`, `r.caja`) |
+   | muñecos | `estilos/munecos/build_munecos.py` | el mismo build (función `tomas()`; dibujos en `estilos/munecos/cosas.py` y `cosas2.py`) |
+   | pizarra animada | `estilos/pizarra_animada/build_pizarra_animada.py` + `plantilla_escenas.ts` → `escenas_pizarra_animada.ts` | TypeScript (kit `archivo.ts`) |
+   | motion design | `estilos/motion_design/build_motion_design.py` + `plantilla_escenas.ts` → `escenas_motion_design.ts` | TypeScript (kit `movimiento.ts`, mismas funciones que archivo.ts) |
+   | gráficas | `estilos/graficas/build_graficas.py` + `plantilla_escenas.py` → `escenas_graficas.py` | Python de Manim (kit `kit.py`: `g.en`, `g.limpiar`, `texto`, `figura`…) |
+   | fanzine | `estilos/fanzine/build_fanzine.py` + `plantilla_escenas.js` → `escenas_fanzine.js` | JavaScript (motor `motor.js`: `estacion`, `titulo`, `icono`, `gente`, `flecha`…) |
+
+3. `PY build_<estilo>.py --guion` → el guion con el segundo de cada frase. En el build se cambian `CORRECCIONES`,
+   `ROJAS` (palabras rojas del subtítulo), las **TOMAS** (`ESC`: dónde empieza cada cuadro, con `ft('frase')`) y los
+   **GOLPES** (pops). Las escenas usan los mismos nombres de toma (`ESC.B`) y `tp('frase')` / `ft('frase')` para el
+   segundo de cada palabra (`tp('Desde', ESC.E)` busca a partir de la toma E: así no agarra un "desde" anterior).
+4. **Revisar antes de rodar** (rápido): fanzine/pizarra animada/motion design `--fotos 3s,12.5s` · gráficas `--previa`
+   (360×640) · muñecos `--revisar` (hoja con el final de cada toma) · handdraw `--solo-json` (lee los avisos).
+5. `PY build_<estilo>.py` rueda el fondo (`<estilo>_raw.mp4`, sin audio) y monta: voz + música (`musica='auto'`) +
+   efectos + subtítulo + presentador → `renders/<proyecto>-<estilo>-borrador.mp4` (ya en calidad final), `-VISTA.mp4`
+   (celular) y `hojas/` (una foto por segundo). `--componer` vuelve a montar sin volver a rodar.
+6. **Revisar las hojas cuadro por cuadro** y corregir antes de mostrar (ver la vara). Con el OK del usuario, el borrador
+   se copia como `renders/<proyecto>-<estilo>-FINAL.mp4`; no hay otro render.
+
+### La vara de estos estilos
+
+1. **Cada frase tiene su dibujo y entra CON su palabra.** Un hueco de más de ~1 s sin nada nuevo al empezar una toma se nota.
+2. **Nada importante en los últimos ~0,4 s de una toma**: el cambio de cuadro lo tapa (en fanzine la cámara se va; lo de
+   la DERECHA es lo último que sale). Si la palabra llega tarde, adelanta la pieza a la frase anterior ("de las que…").
+3. **Zonas:** el dibujo va en y 160-1150; el subtítulo en y ≥ 1230 a la izquierda; la esquina del presentador no se toca.
+4. **Una lista de escenas sirve para varios estilos:** pizarra animada ↔ motion design usan las mismas funciones (se
+   cambia el kit); gráficas y fanzine comparten la manera de armar (tomas + piezas con su segundo).
+5. **Un estilo pesado a la vez** (AniDoodle, handdraw): dos renders juntos ahogan el computador.
 
 ## 2. Flujo de trabajo
 

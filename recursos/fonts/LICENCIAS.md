@@ -10,7 +10,7 @@ Son subconjuntos en formato WOFF2 de las versiones publicadas en Google Fonts; n
 | `jetbrainsmono-*.woff2` | JetBrains Mono | The JetBrains Mono Project Authors — https://github.com/JetBrains/JetBrainsMono |
 | `playfairdisplay-*.woff2` | Playfair Display | The Playfair Display Project Authors — https://github.com/clauseggers/Playfair |
 | `caveat-*.woff2` | Caveat | The Caveat Project Authors — https://github.com/googlefonts/caveat |
-| `poppins-*.woff2` | Poppins | The Poppins Project Authors — https://github.com/itfoundry/Poppins |
+| `poppins-*.woff2`, `poppins-800.ttf` | Poppins | The Poppins Project Authors — https://github.com/itfoundry/Poppins |
 | `montserrat-*.woff2` | Montserrat | The Montserrat Project Authors — https://github.com/JulietaUla/Montserrat |
 
 Los nombres de las fuentes son nombres reservados de sus autores.

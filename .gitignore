@@ -9,3 +9,6 @@ recursos/musica/*.ogg
 recursos/musica/*.flac
 .DS_Store
 Thumbs.db
+# estilos con motor propio: motores que clona estilos/instalar.py y dependencias de node
+motores/
+node_modules/

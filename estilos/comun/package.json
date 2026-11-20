@@ -1,0 +1,8 @@
+{
+  "name": "reel-motion-estilos",
+  "private": true,
+  "description": "Dependencias de node de los estilos con motor propio (las instala estilos/instalar.py)",
+  "dependencies": {
+    "playwright-core": "1.65.1"
+  }
+}

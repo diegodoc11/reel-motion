@@ -45,7 +45,7 @@ Graba tu video, ábrelo en Claude Code y dile:
 Anima este video con reel-motion: C:\Videos\mi-video.mp4
 ```
 
-## Cuatro estilos
+## Cuatro estilos (HyperFrames)
 
 | | **collage** (por defecto) | **noche** | **recrear** | **pizarra** |
 |---|---|---|---|---|
@@ -74,6 +74,25 @@ gráficas, relojes, laptops, carros…), órdenes que se escriben palabra por pa
 
 ![Piezas del estilo pizarra](docs/pizarra.jpg)
 
+## Seis estilos más (con motor propio)
+
+Mismo formato que la pizarra (tú chico en la esquina, el subtítulo que se enciende palabra por palabra, cada cosa
+entra cuando la dices), pero la animación la dibuja otro motor. Todo corre en tu computador, gratis.
+
+| Estilo | Pídelo así | Se ve | Ideal para |
+|---|---|---|---|
+| **handdraw** | "…**estilo handdraw**" | Papel crema, íconos de línea de colores que se trazan solos y textos que se escriben letra por letra | Datos y procesos, limpio |
+| **muñecos** | "…**estilo muñecos**" | Dibujo animado: boceto azul que se vuelve tinta y color, objetos y gente con carita | Historias y ejemplos con personajes |
+| **pizarra animada** | "…**estilo pizarra animada**" | Álbum de archivo: grabados en tarjetas con cinta, letras recortadas, máquina de escribir, sellos | Fechas, historia, comparaciones |
+| **motion design** | "…**estilo motion design**" | Motion graphics profesional: manchas de color, números que suben, íconos planos, insignias | Números, datos, servicios |
+| **gráficas** | "…**estilo gráficas**" | Fondo oscuro con cuadrícula (estilo 3Blue1Brown): contadores, curvas, líneas de tiempo, medidores | Demostrar un dato |
+| **fanzine** | "…**estilo fanzine**" | Impresión de 3 tintas con grano; todo el video es un recorrido que la cámara sigue | Líneas de tiempo y procesos |
+
+![Los seis estilos con motor propio](docs/estilos.jpg)
+
+La primera vez que pidas uno, Claude instala su motor (`estilos/instalar.py`): son proyectos libres de terceros
+que se descargan aparte (ver Créditos).
+
 Claude hace todo esto solo:
 
 1. **Limpia el video**: quita los silencios largos y las frases que repetiste por equivocarte.
@@ -99,6 +118,7 @@ pegarla, nunca en el chat.
 ## Qué puedes pedirle
 
 - "Hazlo en estilo noche" (o "en estilo collage", "en estilo pizarra", o "en estilo recrear con este video: …").
+- "Hazlo en estilo fanzine" (o muñecos, gráficas, motion design, pizarra animada o handdraw).
 - "Cambia el rojo por el azul de mi marca."
 - "Ponle esta música" (deja tu canción en `recursos/musica/` dentro de la skill, o pásale la ruta).
 - "Cuando digo *mis resultados*, muestra estas fotos."
@@ -171,6 +191,11 @@ plantilla/
   recrear.py · recrear.css  las piezas del estilo recrear (objetos y recorridos, tarjetas de precio, contador, barra, menús…)
   build_pizarra.py       estilo pizarra: reel completo de ejemplo (77 s, 15 escenas)
   pizarra.py · dibujos.py   las piezas del estilo pizarra (subtítulo fantasma, monigotes, dibujos a línea, cierre) y 50+ dibujos
+estilos/                 los seis estilos con motor propio
+  componer.py            lo común: voz, música, efectos, subtítulo fantasma, presentador chico, hojas y copia liviana
+  instalar.py · motores.py  instala y encuentra los motores (se descargan aparte, en motores/)
+  handdraw/ munecos/ pizarra_animada/ motion_design/ graficas/ fanzine/
+                         en cada uno: build_<estilo>.py (plantilla con un reel de ejemplo) + el kit de piezas del estilo
 recursos/                fuentes, efectos de sonido, logos (y tu música)
 ```
 
@@ -181,6 +206,13 @@ recursos/                fuentes, efectos de sonido, logos (y tu música)
 - Transcripción: [whisper.cpp](https://github.com/ggml-org/whisper.cpp) (MIT).
 - Recorte: [Robust Video Matting](https://github.com/PeterL1n/RobustVideoMatting) (GPL-3.0). El modelo **no** viene
   en este repositorio: el instalador lo descarga de su publicación oficial.
+- Motores de los seis estilos extra (no vienen en este repositorio; `estilos/instalar.py` los descarga de sus
+  publicaciones oficiales): [AniDoodle](https://github.com/alexgreensh/anidoodle) (Apache-2.0) para pizarra animada y
+  motion design · [claude-drawing](https://github.com/cloveric/claude-drawing-skill) (MIT) para muñecos ·
+  [handdraw-skill](https://github.com/ToBeWin/handdraw-skill) (MIT) para handdraw, que usa
+  [Remotion](https://www.remotion.dev/license) (gratis para personas y equipos pequeños; revisa su licencia si tu
+  empresa es más grande) · [Manim Community](https://www.manim.community) (MIT) para gráficas ·
+  [Playwright](https://playwright.dev) (Apache-2.0) para rodar las páginas.
 - Fuentes: Inter, Inter Tight, JetBrains Mono, Playfair Display, Caveat, Poppins y Montserrat, bajo
   SIL Open Font License 1.1 (ver `recursos/fonts/LICENCIAS.md`).
 - Efectos de sonido: sintetizados para esta skill, libres de usar.
